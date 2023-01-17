@@ -1,0 +1,17 @@
+Package: cppSim
+Type: Package
+Title: Running efficient doubly constrained gravity models in R, powered by C++
+Version: 0.1.0
+Author: Ivann Schlosser
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Imports: 
+    Rcpp
