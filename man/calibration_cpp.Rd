@@ -29,6 +29,5 @@ cost_fun = matrix(data = c(1,2,3,4,5,6,7,8,9), nrow = 3)
 O = c(1,2,3)
 D = c(3,2,1)
 
-a_b = calibration_cpp(cast_fun,O,D)
-
+a_b = calibration_cpp(cost_fun,O,D)
 }

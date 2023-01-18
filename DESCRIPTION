@@ -1,17 +1,34 @@
 Package: cppSim
-Type: Package
-Title: Running efficient doubly constrained gravity models in R, powered by C++
-Version: 0.1.0
-Author: Ivann Schlosser
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: GPL-3
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Spatial interaction models in R, powered by C++.
+License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 LinkingTo: 
     Rcpp,
     RcppArmadillo
 Imports: 
-    Rcpp
+    cppRouting,
+    data.table,
+    doParallel,
+    dplyr,
+    foreach,
+    here,
+    parallel,
+    purrr,
+    Rcpp,
+    reshape2,
+    rlist,
+    rlist,
+    sf,
+    tmap,
+    tmaptools,
+    units
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

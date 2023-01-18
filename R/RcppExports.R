@@ -22,9 +22,26 @@ NULL
 #'@returns
 #'it is a void function but it writes the results into the vector that is passed as argument.
 #'
+NULL
+
+#'
+#'@title
+#'Run model
+#'
+#'@description
+#'This function is the C++ implementation of run_model, it will run a model
+#'
+#'@param flows A integer matrix of Origin-Destination flows.
+#'@param distance a distance matrix between origins and destinations.
+#'@param beta Exponent to use when calculating the cost function.
+#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+#'
+#'@returns
+#'A list containing an integer matrix with predicted values.
 #'@examples
-#'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3)
-#'x = vector(3)
+#'a = 2
+#'b = 3
+#'a + b
 #'
 NULL
 
@@ -50,27 +67,12 @@ NULL
 #'O = c(1,2,3)
 #'D = c(3,2,1)
 #'
-#'a_b = calibration_cpp(cast_fun,O,D)
-#'
+#'a_b = calibration_cpp(cost_fun,O,D)
+#'@export
 calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
     .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
-#'
-#'@title
-#'Run model
-#'
-#'@description
-#'This function will run a model
-#'
-#'@param flows A integer matrix of Origin-Destination flows.
-#'@param distance a distance matrix between origins and destinations.
-#'@param beta Exponent to use when calculating the cost function.
-#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
-#'
-#'@returns
-#'A list containing an integer matrix with predicted values.
-#'@export
 run_model_cpp <- function(flows, distance, beta = .25, type = "exp") {
     .Call(`_cppSim_run_model_cpp`, flows, distance, beta, type)
 }

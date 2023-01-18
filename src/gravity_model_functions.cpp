@@ -95,8 +95,8 @@ double e_sorencen_cpp(arma::mat data, arma::mat fit ){
 //'O = c(1,2,3)
 //'D = c(3,2,1)
 //'
-//'a_b = calibration_cpp(cast_fun,O,D)
-//'
+//'a_b = calibration_cpp(cost_fun,O,D)
+//'@export
 // [[Rcpp::export]]
 Rcpp::List calibration_cpp(arma::mat cost_fun
                             ,arma::vec O
@@ -150,10 +150,10 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //'@returns
 //'it is a void function but it writes the results into the vector that is passed as argument.
 //'
-//'@examples
-//'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3)
-//'x = vector(3)
-//'
+//@examples
+//mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3)
+//x = vector(3)
+//
 void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
   if (dim == 1) {
     // arma::vec res(mat1.n_rows);
@@ -178,7 +178,7 @@ void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
 //'Run model
 //'
 //'@description
-//'This function will run a model
+//'This function is the C++ implementation of run_model, it will run a model
 //'
 //'@param flows A integer matrix of Origin-Destination flows.
 //'@param distance a distance matrix between origins and destinations.
@@ -187,7 +187,12 @@ void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
 //'
 //'@returns
 //'A list containing an integer matrix with predicted values.
-//'@export
+//'@examples
+//'a = 2
+//'b = 3
+//'a + b
+//'
+// @export
 // [[Rcpp::export]]
 List run_model_cpp(arma::mat flows
                  ,arma::mat distance
