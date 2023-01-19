@@ -73,6 +73,10 @@ calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
     .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
+apply_cpp <- function(mat1, res, dim = 1L) {
+    invisible(.Call(`_cppSim_apply_cpp`, mat1, res, dim))
+}
+
 run_model_cpp <- function(flows, distance, beta = .25, type = "exp") {
     .Call(`_cppSim_run_model_cpp`, flows, distance, beta, type)
 }

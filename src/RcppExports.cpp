@@ -25,6 +25,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// apply_cpp
+void apply_cpp(arma::mat& mat1, arma::vec& res, int dim);
+RcppExport SEXP _cppSim_apply_cpp(SEXP mat1SEXP, SEXP resSEXP, SEXP dimSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type mat1(mat1SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type res(resSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    apply_cpp(mat1, res, dim);
+    return R_NilValue;
+END_RCPP
+}
 // run_model_cpp
 List run_model_cpp(arma::mat flows, arma::mat distance, double beta, std::string type);
 RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
@@ -42,6 +54,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
+    {"_cppSim_apply_cpp", (DL_FUNC) &_cppSim_apply_cpp, 3},
     {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 4},
     {NULL, NULL, 0}
 };

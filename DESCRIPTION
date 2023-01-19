@@ -1,5 +1,5 @@
 Package: cppSim
-Title: What the Package Does (One Line, Title Case)
+Title: Doubly constrained gravity models in R with C++
 Version: 0.0.0.9000
 Authors@R: 
     person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),

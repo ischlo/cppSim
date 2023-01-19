@@ -154,6 +154,7 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3)
 //x = vector(3)
 //
+// [[Rcpp::export]]
 void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
 
 // add checks whether the res dim matches.
