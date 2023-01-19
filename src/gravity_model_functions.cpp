@@ -155,6 +155,8 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //x = vector(3)
 //
 void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
+
+// add checks whether the res dim matches.
   if (dim == 1) {
     // arma::vec res(mat1.n_rows);
 

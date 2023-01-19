@@ -9,7 +9,7 @@ run_model(flows, distance, beta = 0.25, type = "exp")
 \arguments{
 \item{flows}{A integer matrix of Origin-Destination flows.}
 
-\item{distance}{a distance matrix between origins and destinations.}
+\item{distance}{a distance matrix between origins and destinations, provide distance in km.}
 
 \item{beta}{Exponent to use when calculating the cost function.}
 
@@ -20,4 +20,12 @@ A list containing an integer matrix with predicted values.
 }
 \description{
 This function is the C++ implementation of run_model, it will run a model
+}
+\examples{
+
+data(flows_test)
+data(distance_test)
+
+model_test <- run_model(flows_test,distance_test)
+
 }

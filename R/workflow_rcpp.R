@@ -334,14 +334,15 @@ simulation <- function(flows_matrix
 
   #### GRAVITY MODEL STUFF
 
-  # key values : for an exponential cost function, the range of beta values to look at is (0,2) with a best fit around  0.025 is the smaller study area
+  # key values : for an exponential cost function,
+  # the range of beta values to look at is (0,2) with a best fit around  0.025 is the smaller study area
   # for time in the cost function,
 
   # ameliorate the following part
-  # options : convrging which, for with specified values
+  # options : converging which, for with specified values
 
   if (time) {
-    # converting distance to time, rough average
+    # converting distance to time, rough average with speed of 14 km/h, time in hours.
     graph_dist_matrix <- graph_dist_matrix/(1000*14)
     range_i <- 0:120
   } else {
@@ -349,37 +350,6 @@ simulation <- function(flows_matrix
     range_i <- 1:30
     graph_dist_matrix <- graph_dist_matrix/1000
   }
-
-  # maximised <- FALSE
-  # beta <- 2
-  # alpha <- 0.01
-  # i <- 0
-  # r2_ref <- 0
-  # e_sor <- c()
-  #
-  # while (!maximised) {
-  #   # beta <- beta+alpha
-  #   print(paste0("calibrating for beta = ",beta))
-  #   run <- run_model(flows = flows_matrix
-  #                    ,distance = graph_dist_matrix
-  #                    ,beta = beta
-  #                    ,type = "exp"
-  #                    ,cores = n_cores
-  #   )
-  #   print(paste0("R2 = ",run$r2))
-  #   e_sor <- append(e_sor,run$e_sor)
-  #   if (run$r2 > r2_ref) {
-  #     beta <- beta - alpha
-  #     r2_ref <- run$r2
-  #   } else if(run$r2 <= r2_ref)  {
-  #     maximised <- TRUE
-  #     beta <- beta + alpha
-  #     }
-  #   i <- i+1
-  # }
-  #
-  # beta_best_fit <- beta
-
 
   # cpp convert
   beta_calib <- foreach::foreach(i = range_i
@@ -489,22 +459,43 @@ simulation <- function(flows_matrix
 #'This function is the C++ implementation of run_model, it will run a model
 #'
 #'@param flows A integer matrix of Origin-Destination flows.
-#'@param distance a distance matrix between origins and destinations.
+#'@param distance a distance matrix between origins and destinations, provide distance in km.
 #'@param beta Exponent to use when calculating the cost function.
 #'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
 #'
 #'@returns
 #'A list containing an integer matrix with predicted values.
+#'
+#'@examples
+#'
+#'data(flows_test)
+#'data(distance_test)
+#'
+#'model_test <- run_model(flows_test,distance_test)
+#'
 #'@export
 run_model <- function(flows
                       ,distance
                       ,beta = 0.25
                       ,type = "exp") {
 
-  if(!is.matrix(flows)){stop("provide a matrix integers for flows ")}
-  if(!is.matrix(distance)) {stop("provide a matrix with numeric values for the distance.")}
-  if(!(type %in% c("exp","pow"))) { stop("the type of cost function is either 'exp' for exponential or 'pow' for power law.") }
-  if(!is.numeric(beta)) { stop("provide a numeric values for the beta parameter.")}
+  if(!is.matrix(flows) &
+     !(typeof(flows) %in% c("integer"))) {
+    stop("provide a matrix with integers for flows, you can force the data type with 'as.integer(flows)'")
+  }
+
+  if(!is.matrix(distance) &
+     !(is.numeric(distance))) {
+    stop("provide a matrix with numeric values for the distance.")
+  }
+
+  if(!(type %in% c("exp","pow"))) {
+    stop("the type of cost function is either 'exp' for exponential or 'pow' for power law.")
+  }
+
+  if(!is.numeric(beta)) {
+    stop("provide a numeric values for the beta parameter.")
+    }
 
   run_model_cpp(flows
                 ,distance
