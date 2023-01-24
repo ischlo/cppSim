@@ -10,6 +10,8 @@
 using namespace Rcpp;
 
 
+arma::vec apply_iter(const arma::sp_mat& x, int dim);
+
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
 // function (or via the Source button on the editor toolbar). Learn
@@ -27,31 +29,19 @@ using namespace Rcpp;
 //' @param coef The exponent
 //'
 //'
-arma::mat mat_exp(arma::mat mat, double coef = 1) {
+arma::mat mat_exp(const arma::mat& mat, double coef = 1) {
 
   arma::mat res = mat*coef;
 
-  arma::mat::iterator it;
+  arma::mat::iterator it = res.begin();
 
-  for (it = res.begin(); it != res.end(); ++it) {
+  for (;it != res.end(); ++it) {
     // std::cout << *it << std::endl;
     *it = std::exp(*it);
   }
-
   return res;
 }
 
-
-void tests(arma::mat mat1
-           ,arma::vec v1 ){
-
-  std::cout << 1/arma::accu(v1%(v1+4)) << std::endl;
-
-  std::cout << "NEXT test : " << std::endl;
-
-  std::cout << mat1.col(1) << std::endl;
-
-}
 
 double r_2_cpp(arma::mat data, arma::mat fit){
   // cor ^ 2;
@@ -109,12 +99,15 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
   double eps = cost_fun.n_cols;
 
   NumericVector e;
-
+  // std::cout << "Entering do loop" << std::endl;
   do {
 
+    // std::cout << "calculating A_new" << std::endl;
     for(int j = 0; j < cost_fun.n_rows; ++j){
       A_new(j) = 1.0/arma::accu(B%D%cost_fun.row(j).as_col());
     }
+
+    // std::cout << "calculating B_new" << std::endl;
     for(int j = 0; j < cost_fun.n_cols; ++j){
       B_new(j) = 1.0/arma::accu(A_new%O%cost_fun.col(j));
     }
@@ -140,41 +133,69 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 
 //'
 //'@description
-//'Apply function from R rewritten in cpp to gain some speed.
-//'The resulting vector is passed by refrence and needs to be created in advanced and passed as parameter.
+//'Apply function from R rewritten for sparse matrices in cpp to gain speed.
+//'
 //'
 //'@param mat1 The matrix to which the functino is applied
 //'@param vec the vector in which the result will be stored.
 //'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
 //'
 //'@returns
-//'it is a void function but it writes the results into the vector that is passed as argument.
 //'
-//@examples
-//mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3)
-//x = vector(3)
-//
+//'
+//'@examples
+//'library(Matrix)
+//'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3,sparse = TRUE)
+//'
+//'res1 = apply_iter(mat,1)
+//'res2 = apply_iter(mat,2)
+//@export
 // [[Rcpp::export]]
-void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
+arma::vec apply_iter(const arma::sp_mat& x, int dim = 1) {
 
-// add checks whether the res dim matches.
-  if (dim == 1) {
-    // arma::vec res(mat1.n_rows);
-
-    for (int i = 0; i<mat1.n_rows; ++i) {
-      res(i) = accu(mat1.row(i));
-    }
-
-  } else if (dim == 2) {
-    // arma::vec res(mat1.n_cols);
-    for (int i = 0; i<mat1.n_cols; ++i) {
-      res(i) = accu(mat1.col(i));
-    }
-
-  } else {
-    std::cout << "Enter either 1 or 2 for dimension" << std::endl;
+  int n(0);
+  switch(dim) {
+  case 1:
+    n = x.n_rows;
+    break;
+  case 2:
+    n = x.n_cols;
+    break;
   }
+  arma::vec result(n);
+  arma::sp_mat::const_iterator i = x.begin();
+  if (dim ==1){
+    for (; i != x.end(); ++i) {
+      result(i.row())+=*i;
+    }
+  } else if (dim == 2){
+    for (; i != x.end(); ++i) {
+      result(i.col())+=*i;
+    }
+  }
+  return result;
 }
+// void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
+//
+// // add checks whether the res dim matches.
+//   if (dim == 1) {
+//     // arma::vec res(mat1.n_rows);
+//
+//     for (int i = 0; i<mat1.n_rows; ++i) {
+//       res(i) = accu(mat1.row(i));
+//     }
+//
+//   } else if (dim == 2) {
+//     // arma::vec res(mat1.n_cols);
+//     for (int i = 0; i<mat1.n_cols; ++i) {
+//       res(i) = accu(mat1.col(i));
+//     }
+//
+//   } else {
+//     std::cout << "Enter either 1 or 2 for dimension" << std::endl;
+//   }
+// }
+
 
 //'
 //'@title
@@ -197,18 +218,18 @@ void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
 //'
 // @export
 // [[Rcpp::export]]
-List run_model_cpp(arma::mat flows
-                 ,arma::mat distance
+List run_model_cpp(const arma::sp_mat& flows
+                 ,const arma::mat& distance
                  ,double beta = .25
                  ,std::string type = "exp"){
 
   arma::mat f_c = mat_exp(distance, -beta);
   std::cout << "Cost function computed ! " << std::endl;
 
-  arma::vec O(flows.n_rows), D(flows.n_cols);
-
-  apply_cpp(flows, O, 1);
-  apply_cpp(flows, D, 2);
+  arma::vec O = apply_iter(flows,1);
+  // std::cout << "Computed O"<< std::endl;
+  arma::vec D = apply_iter(flows,2);
+  // std::cout << "Computed D"<< std::endl;
 
   Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
 
@@ -218,6 +239,8 @@ List run_model_cpp(arma::mat flows
   arma::vec B = A_B["B"];
 
   arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
+
+  std::cout<< " Values modelled " << std::endl;
 
   return Rcpp::List::create(Rcpp::Named("values") = flows_model);
 }

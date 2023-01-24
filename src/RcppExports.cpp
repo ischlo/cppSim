@@ -25,26 +25,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// apply_cpp
-void apply_cpp(arma::mat& mat1, arma::vec& res, int dim);
-RcppExport SEXP _cppSim_apply_cpp(SEXP mat1SEXP, SEXP resSEXP, SEXP dimSEXP) {
+// apply_iter
+arma::vec apply_iter(const arma::sp_mat& x, int dim);
+RcppExport SEXP _cppSim_apply_iter(SEXP xSEXP, SEXP dimSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat& >::type mat1(mat1SEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type res(resSEXP);
+    Rcpp::traits::input_parameter< const arma::sp_mat& >::type x(xSEXP);
     Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
-    apply_cpp(mat1, res, dim);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(apply_iter(x, dim));
+    return rcpp_result_gen;
 END_RCPP
 }
 // run_model_cpp
-List run_model_cpp(arma::mat flows, arma::mat distance, double beta, std::string type);
+List run_model_cpp(const arma::sp_mat& flows, const arma::mat& distance, double beta, std::string type);
 RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type flows(flowsSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< const arma::sp_mat& >::type flows(flowsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta, type));
@@ -54,7 +54,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
-    {"_cppSim_apply_cpp", (DL_FUNC) &_cppSim_apply_cpp, 3},
+    {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},
     {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 4},
     {NULL, NULL, 0}
 };

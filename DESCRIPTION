@@ -19,6 +19,7 @@ Imports:
     dplyr,
     foreach,
     here,
+    Matrix,
     parallel,
     purrr,
     Rcpp,

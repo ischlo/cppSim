@@ -12,16 +12,22 @@ NULL
 
 #'
 #'@description
-#'Apply function from R rewritten in cpp to gain some speed.
-#'The resulting vector is passed by refrence and needs to be created in advanced and passed as parameter.
+#'Apply function from R rewritten for sparse matrices in cpp to gain speed.
+#'
 #'
 #'@param mat1 The matrix to which the functino is applied
 #'@param vec the vector in which the result will be stored.
 #'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
 #'
 #'@returns
-#'it is a void function but it writes the results into the vector that is passed as argument.
 #'
+#'
+#'@examples
+#'library(Matrix)
+#'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3,sparse = TRUE)
+#'
+#'res1 = apply_iter(mat,1)
+#'res2 = apply_iter(mat,2)
 NULL
 
 #'
@@ -73,8 +79,8 @@ calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
     .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
-apply_cpp <- function(mat1, res, dim = 1L) {
-    invisible(.Call(`_cppSim_apply_cpp`, mat1, res, dim))
+apply_iter <- function(x, dim = 1L) {
+    .Call(`_cppSim_apply_iter`, x, dim)
 }
 
 run_model_cpp <- function(flows, distance, beta = .25, type = "exp") {
