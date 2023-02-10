@@ -497,9 +497,9 @@ run_model <- function(flows
     stop("provide a numeric values for the beta parameter.")
     }
 
-  run_model_cpp(Matrix::Matrix(flows,sparse = TRUE)
+  run_model_cpp(flows #Matrix::Matrix(flows,sparse = TRUE)
                 ,distance
-                ,beta = 0.25
+                ,beta_ = beta
                 ,type = "exp")
 
 }

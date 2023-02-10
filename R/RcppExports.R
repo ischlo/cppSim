@@ -20,7 +20,7 @@ NULL
 #'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
 #'
 #'@returns
-#'
+#'A vector, to which the sum function has been applied either by row or by column
 #'
 #'@examples
 #'library(Matrix)
@@ -83,7 +83,23 @@ apply_iter <- function(x, dim = 1L) {
     .Call(`_cppSim_apply_iter`, x, dim)
 }
 
-run_model_cpp <- function(flows, distance, beta = .25, type = "exp") {
-    .Call(`_cppSim_run_model_cpp`, flows, distance, beta, type)
+run_model_cpp <- function(flows, distance, beta_ = .25, threshold = 15, type = "exp") {
+    .Call(`_cppSim_run_model_cpp`, flows, distance, beta_, threshold, type)
+}
+
+run_model_prod_cpp <- function(flows, distance, beta = .25, type = "exp") {
+    .Call(`_cppSim_run_model_prod_cpp`, flows, distance, beta, type)
+}
+
+run_model_attr_cpp <- function(flows, distance, beta = .25, type = "exp") {
+    .Call(`_cppSim_run_model_attr_cpp`, flows, distance, beta, type)
+}
+
+pearsoncoeff <- function(X, Y) {
+    .Call(`_cppSim_pearsoncoeff`, X, Y)
+}
+
+run_simulation <- function(distance, flows, beta_orig = .25, type = "exp") {
+    .Call(`_cppSim_run_simulation`, distance, flows, beta_orig, type)
 }
 

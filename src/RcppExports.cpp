@@ -38,8 +38,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_model_cpp
-List run_model_cpp(const arma::sp_mat& flows, const arma::mat& distance, double beta, std::string type);
-RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
+List run_model_cpp(const arma::mat& flows, const arma::mat& distance, double beta_, double threshold, std::string type);
+RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP beta_SEXP, SEXP thresholdSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type flows(flowsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< double >::type beta_(beta_SEXP);
+    Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta_, threshold, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// run_model_prod_cpp
+List run_model_prod_cpp(const arma::sp_mat& flows, const arma::mat& distance, double beta, std::string type);
+RcppExport SEXP _cppSim_run_model_prod_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -47,7 +62,47 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
     Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta, type));
+    rcpp_result_gen = Rcpp::wrap(run_model_prod_cpp(flows, distance, beta, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// run_model_attr_cpp
+List run_model_attr_cpp(const arma::mat& flows, const arma::mat& distance, double beta, std::string type);
+RcppExport SEXP _cppSim_run_model_attr_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type flows(flowsSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_model_attr_cpp(flows, distance, beta, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pearsoncoeff
+double pearsoncoeff(const arma::mat& X, const arma::mat& Y);
+RcppExport SEXP _cppSim_pearsoncoeff(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(pearsoncoeff(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// run_simulation
+List run_simulation(const arma::mat& distance, const arma::mat& flows, double beta_orig, std::string type);
+RcppExport SEXP _cppSim_run_simulation(SEXP distanceSEXP, SEXP flowsSEXP, SEXP beta_origSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type flows(flowsSEXP);
+    Rcpp::traits::input_parameter< double >::type beta_orig(beta_origSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_simulation(distance, flows, beta_orig, type));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -55,7 +110,11 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
     {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},
-    {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 4},
+    {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 5},
+    {"_cppSim_run_model_prod_cpp", (DL_FUNC) &_cppSim_run_model_prod_cpp, 4},
+    {"_cppSim_run_model_attr_cpp", (DL_FUNC) &_cppSim_run_model_attr_cpp, 4},
+    {"_cppSim_pearsoncoeff", (DL_FUNC) &_cppSim_pearsoncoeff, 2},
+    {"_cppSim_run_simulation", (DL_FUNC) &_cppSim_run_simulation, 4},
     {NULL, NULL, 0}
 };
 

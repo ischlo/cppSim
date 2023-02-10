@@ -1,11 +1,11 @@
 #include <RcppArmadillo.h>
 #include <strings.h>
+#include <cstdlib>
+#include <iterator>
 
 // [[Rcpp::depends(RcppArmadillo)]]
-
 // [[Rcpp::plugins("cpp11")]]
 
-#include <iterator>
 
 using namespace Rcpp;
 
@@ -60,6 +60,21 @@ double e_sorencen_cpp(arma::mat data, arma::mat fit ){
 //                       ,fit %>% c), MARGIN = 1, FUN = min))/(sum(data) + sum(fit))
 // }
 
+// function to turn a matrix into a sparse one using a threshold
+// to use in order to avoid computing flows for unrealistic values, for active travel 15 km seems a good fit
+arma::sp_mat mat_to_sparse(const arma::mat& x, double threshold = 15.0) {
+
+  arma::sp_mat res(x);
+
+  arma::sp_mat::iterator it = res.begin();
+
+  for(;it != res.end();++it) {
+    if (*it > threshold) {
+      *it = 0;
+    }
+  }
+  return res;
+}
 
 
 
@@ -102,15 +117,21 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
   // std::cout << "Entering do loop" << std::endl;
   do {
 
-    // std::cout << "calculating A_new" << std::endl;
-    for(int j = 0; j < cost_fun.n_rows; ++j){
-      A_new(j) = 1.0/arma::accu(B%D%cost_fun.row(j).as_col());
-    }
+    //  wsa the fastest, but arma::sum seems slightly faster
+    // // std::cout << "calculating A_new" << std::endl;
+    // for(int j = 0; j < cost_fun.n_rows; ++j){
+    //   A_new(j) = 1.0/arma::accu(B%D%cost_fun.row(j).as_col());
+    // }
+    //
+    // // std::cout << "calculating B_new" << std::endl;
+    // for(int j = 0; j < cost_fun.n_cols; ++j){
+    //   B_new(j) = 1.0/arma::accu(A_new%O%cost_fun.col(j));
+    // }
 
-    // std::cout << "calculating B_new" << std::endl;
-    for(int j = 0; j < cost_fun.n_cols; ++j){
-      B_new(j) = 1.0/arma::accu(A_new%O%cost_fun.col(j));
-    }
+    A_new = 1.0/arma::sum(arma::mat(cost_fun.each_row() % (B.t() % D.t())),1);
+
+    B_new = 1.0/arma::sum(arma::mat(cost_fun.each_col() % (A_new % O)),0).as_col();
+
     ++i;
 
     eps = arma::accu(arma::norm(B-B_new, 1));
@@ -141,7 +162,7 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
 //'
 //'@returns
-//'
+//'A vector, to which the sum function has been applied either by row or by column
 //'
 //'@examples
 //'library(Matrix)
@@ -218,18 +239,22 @@ arma::vec apply_iter(const arma::sp_mat& x, int dim = 1) {
 //'
 // @export
 // [[Rcpp::export]]
-List run_model_cpp(const arma::sp_mat& flows
+List run_model_cpp(const arma::mat& flows
                  ,const arma::mat& distance
-                 ,double beta = .25
+                 ,double beta_ = .25
+                 ,double threshold = 15
                  ,std::string type = "exp"){
 
-  arma::mat f_c = mat_exp(distance, -beta);
+  arma::mat f_c = mat_exp(distance, -beta_);
   std::cout << "Cost function computed ! " << std::endl;
 
-  arma::vec O = apply_iter(flows,1);
-  // std::cout << "Computed O"<< std::endl;
-  arma::vec D = apply_iter(flows,2);
-  // std::cout << "Computed D"<< std::endl;
+  // arma::vec O = apply_iter(flows,1);
+  // // std::cout << "Computed O"<< std::endl;
+  // arma::vec D = apply_iter(flows,2);
+  // // std::cout << "Computed D"<< std::endl;
+
+  arma::vec O = arma::sum(flows,1);
+  arma::vec D = arma::sum(flows.t(),1);
 
   Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
 
@@ -244,4 +269,149 @@ List run_model_cpp(const arma::sp_mat& flows
 
   return Rcpp::List::create(Rcpp::Named("values") = flows_model);
 }
+
+
+
+// [[Rcpp::export]]
+List run_model_prod_cpp(const arma::sp_mat& flows
+                     ,const arma::mat& distance
+                     ,double beta = .25
+                     ,std::string type = "exp"){
+
+  //  simulating the production constrained model, when Oi is known.
+
+  // arma::mat f_c = mat_exp(distance, -beta);
+  // std::cout << "Cost function computed ! " << std::endl;
+  //
+  // arma::vec O = apply_iter(flows,1);
+  // // std::cout << "Computed O"<< std::endl;
+  // arma::vec D = apply_iter(flows,2);
+  // // std::cout << "Computed D"<< std::endl;
+  //
+  // Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
+  //
+  // std::cout<< " Calibration over. " << std::endl;
+  //
+  // arma::vec A = A_B["A"];
+  // arma::vec B = A_B["B"];
+  //
+  // arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
+  //
+  // std::cout<< " Values modelled " << std::endl;
+
+  return Rcpp::List::create(Rcpp::Named("values"));
+}
+
+
+
+// [[Rcpp::export]]
+List run_model_attr_cpp(const arma::mat& flows
+                          ,const arma::mat& distance
+                          ,double beta = .25
+                          ,std::string type = "exp"){
+
+  // simulating the attraction constrained model, when Dj is known
+
+  // arma::mat f_c = mat_exp(distance, -beta);
+  // std::cout << "Cost function computed ! " << std::endl;
+  //
+  // arma::vec O = apply_iter(flows,1);
+  // // std::cout << "Computed O"<< std::endl;
+  // arma::vec D = apply_iter(flows,2);
+  // // std::cout << "Computed D"<< std::endl;
+  //
+  // Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
+  //
+  // std::cout<< " Calibration over. " << std::endl;
+  //
+  // arma::vec A = A_B["A"];
+  // arma::vec B = A_B["B"];
+  //
+  // arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
+  //
+  // std::cout<< " Values modelled " << std::endl;
+
+  return Rcpp::List::create(Rcpp::Named("values"));
+}
+
+
+
+// [[Rcpp::export]]
+double pearsoncoeff(const arma::mat& X, const arma::mat& Y)
+{
+  // double sq_mean = arma::pow(Y.as_col() - arma::mean(Y.as_col()),2);
+  //
+  // double resid = arma::pow(X.as_col() - Y.as_col(),2);
+
+  return arma::as_scalar(arma::cor(X.as_col(),Y.as_col()));
+
+  // return 1.0 - arma::accu()/arma::accu();
+
+}
+
+double abs_val(double x) {
+
+  if (x >= 0){
+    return x;
+  }
+  return -x;
+}
+
+
+// [[Rcpp::export]]
+List run_simulation(const arma::mat& distance
+                      ,const arma::mat& flows
+                      ,double beta_orig = .25
+                      ,std::string type = "exp"){
+
+  // Newton method to find maxima here
+  // trying to find the beta that maximisies the quality of fit function
+
+  double beta_new = beta_orig + .05;
+  List res1, res2,res3;
+  double eps = 1.0;
+  int i = 0;
+  double step = 0.03;
+
+do {
+
+
+  res1 = run_model_cpp(flows
+                         ,distance
+                         ,beta_orig);
+
+  res2 = run_model_cpp(flows
+                         ,distance
+                         ,beta_orig + step);
+
+  res3 = run_model_cpp(flows
+                         ,distance
+                         ,beta_orig - step);
+
+  double r2 = -pearsoncoeff(flows, res1["values"]);
+
+  double r2_2 = -pearsoncoeff(flows, res2["values"]);
+
+  double r2_3 = -pearsoncoeff(flows, res3["values"]);
+  //
+  double d_r2 = (r2_2 - r2)/step;
+
+  double dd_r2 = (r2_3 - 2*r2 + r2_2)/(step*step);
+
+  beta_new = beta_orig - d_r2/dd_r2;
+
+  eps = abs_val(beta_orig-beta_new);
+
+  beta_orig = beta_new;
+
+  i++;
+
+  } while ( eps > step);
+
+  std::cout << "Iteration completed in " << i << " steps" << std::endl;
+
+  return Rcpp::List::create(Rcpp::Named("best_fit_values") = res1["values"]
+                              ,Rcpp::Named("best_fit_beta") = beta_orig);
+}
+
 
