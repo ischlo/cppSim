@@ -1,38 +1,18 @@
 Package: cppSim
-Title: Doubly constrained gravity models in R with C++
+Title: Fast and efficient spatial interaction model
 Version: 0.0.0.9000
 Authors@R: 
     person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Spatial interaction models in R, powered by C++.
+Description: Spatial interaction model in R with a cpp backend for memory efficiency and speed. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: Rcpp
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Imports: 
-    cppRouting,
-    data.table,
-    doParallel,
-    dplyr,
-    foreach,
-    here,
-    Matrix,
-    parallel,
-    purrr,
-    Rcpp,
-    reshape2,
-    rlist,
-    rlist,
-    sf,
-    tmap,
-    tmaptools,
-    units
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
 Depends: 
     R (>= 2.10)
 LazyData: true

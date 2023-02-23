@@ -4,46 +4,14 @@
 \alias{simulation}
 \title{Running a whole simulation of a doubly constrained gravity model}
 \usage{
-simulation(
-  flows_matrix,
-  region_data,
-  run_name,
-  graph = NULL,
-  from = NULL,
-  to = NULL,
-  graph_dist_matrix = NULL,
-  beta_offset = 0,
-  dist_threshold = 15000,
-  norm = 2,
-  time = FALSE,
-  n_cores = 3,
-  cost_fun = "exp"
-)
+simulation(flows_matrix, dist_matrix, beta_offset = 0.25, cost_fun = "exp")
 }
 \arguments{
 \item{flows_matrix}{a integer matrix of flows}
 
-\item{region_data}{a Sf data.frame containing at least a column which stores as well known text (wkt) the points of origin}
-
-\item{run_name}{a name for the simulation}
-
-\item{graph}{a cppRouting generated graph.}
-
-\item{from}{the name of the culomn with origin points}
-
-\item{to}{the name of the column with destination points, if same as from, set to NULL}
-
-\item{graph_dist_matrix}{a network distance matrix in case it was already computed}
+\item{dist_matrix}{a distance matrix containing numeric values in kilometers}
 
 \item{beta_offset}{an offset from 0 from which to start looking for the best fit value.}
-
-\item{dist_threshold}{a distance threshold to use.}
-
-\item{norm}{kind of reference distance to use, 1 for manhattan, 2 for euclidean}
-
-\item{time}{to convert distance to time, set to TRUE for time.}
-
-\item{n_cores}{number of threads to run the model}
 
 \item{cost_fun}{type of cost function}
 }
@@ -53,5 +21,16 @@ The file run_name_best_fit.rds contain the matrices with values from the model
 , and the quality of fit values for the beta values.
 }
 \description{
-this script takes a network, a flows data, and constructs everything from scratch to run a model based on some intput parameters.
+this script takes flows data, distance matrix, and a reference beta parameter
+and finds the optimal beta value for the model, runs it, and returns the result and the beta of
+best fit.
+
+currently only the exp value is accepted for the cost_fun parameter.
+}
+\examples{
+
+data(flows_test)
+data(distance_test)
+
+model <- simulation(flows_test,distance_test)
 }

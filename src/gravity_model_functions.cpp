@@ -101,7 +101,7 @@ arma::sp_mat mat_to_sparse(const arma::mat& x, double threshold = 15.0) {
 //'D = c(3,2,1)
 //'
 //'a_b = calibration_cpp(cost_fun,O,D)
-//'@export
+//@export
 // [[Rcpp::export]]
 Rcpp::List calibration_cpp(arma::mat cost_fun
                             ,arma::vec O
@@ -358,8 +358,10 @@ double abs_val(double x) {
 }
 
 
+
+// this works !!
 // [[Rcpp::export]]
-List run_simulation(const arma::mat& distance
+List run_simulation_cpp(const arma::mat& distance
                       ,const arma::mat& flows
                       ,double beta_orig = .25
                       ,std::string type = "exp"){
@@ -408,7 +410,7 @@ do {
 
   } while ( eps > step);
 
-  std::cout << "Iteration completed in " << i << " steps" << std::endl;
+  // std::cout << "Iteration completed in " << i << " steps" << std::endl;
 
   return Rcpp::List::create(Rcpp::Named("best_fit_values") = res1["values"]
                               ,Rcpp::Named("best_fit_beta") = beta_orig);
