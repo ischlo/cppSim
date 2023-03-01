@@ -2,7 +2,7 @@
 % Please edit documentation in R/workflow_rcpp.R
 \name{run_model}
 \alias{run_model}
-\title{Running a model}
+\title{Running doubly constrained model}
 \usage{
 run_model(flows, distance, beta = 0.25, type = "exp")
 }
@@ -19,7 +19,7 @@ run_model(flows, distance, beta = 0.25, type = "exp")
 A list containing an integer matrix with predicted values.
 }
 \description{
-This function is the C++ implementation of run_model, it will run a model
+This function is the C++ implementation of run_model, it will run a doubly constrained model
 }
 \examples{
 

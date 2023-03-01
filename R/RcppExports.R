@@ -2,15 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #'
-#'Function to take the exponential of each element of a matrix individually.
-#'If an element is x, this function returns exp(coef*x)
-#' @param mat A numeric matrix
-#' @param coef The exponent
-#'
-#'
-NULL
-
-#'
 #'@title
 #'Calibrating the balancing factors
 #'
@@ -33,26 +24,6 @@ NULL
 #'D = c(3,2,1)
 #'
 #'a_b = calibration_cpp(cost_fun,O,D)
-NULL
-
-#'
-#'@description
-#'Apply function from R rewritten for sparse matrices in cpp to gain speed.
-#'
-#'
-#'@param mat1 The matrix to which the functino is applied
-#'@param vec the vector in which the result will be stored.
-#'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
-#'
-#'@returns
-#'A vector, to which the sum function has been applied either by row or by column
-#'
-#'@examples
-#'library(Matrix)
-#'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3,sparse = TRUE)
-#'
-#'res1 = apply_iter(mat,1)
-#'res2 = apply_iter(mat,2)
 NULL
 
 #'
@@ -80,27 +51,33 @@ calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
     .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
-apply_iter <- function(x, dim = 1L) {
-    .Call(`_cppSim_apply_iter`, x, dim)
-}
-
 run_model_cpp <- function(flows, distance, beta_ = .25, threshold = 15, type = "exp") {
     .Call(`_cppSim_run_model_cpp`, flows, distance, beta_, threshold, type)
 }
 
-run_model_prod_cpp <- function(flows, distance, beta = .25, type = "exp") {
-    .Call(`_cppSim_run_model_prod_cpp`, flows, distance, beta, type)
+run_simulation_cpp <- function(distance, flows, beta_orig = .25, type = "exp") {
+    .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig, type)
 }
 
-run_model_attr_cpp <- function(flows, distance, beta = .25, type = "exp") {
-    .Call(`_cppSim_run_model_attr_cpp`, flows, distance, beta, type)
+#'
+NULL
+
+run_model_single_cpp <- function(flow, weight, distance, beta = .25, type = "exp") {
+    .Call(`_cppSim_run_model_single_cpp`, flow, weight, distance, beta, type)
+}
+
+#'
+NULL
+
+apply_iter <- function(x, dim = 1L) {
+    .Call(`_cppSim_apply_iter`, x, dim)
 }
 
 pearsoncoeff <- function(X, Y) {
     .Call(`_cppSim_pearsoncoeff`, X, Y)
 }
 
-run_simulation_cpp <- function(distance, flows, beta_orig = .25, type = "exp") {
-    .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig, type)
+abs_val <- function(x) {
+    .Call(`_cppSim_abs_val`, x)
 }
 

@@ -2,81 +2,13 @@
 #include <strings.h>
 #include <cstdlib>
 #include <iterator>
+#include "support.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins("cpp11")]]
 
 
 using namespace Rcpp;
-
-
-arma::vec apply_iter(const arma::sp_mat& x, int dim);
-
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-
-
-//'
-//'Function to take the exponential of each element of a matrix individually.
-//'If an element is x, this function returns exp(coef*x)
-//' @param mat A numeric matrix
-//' @param coef The exponent
-//'
-//'
-arma::mat mat_exp(const arma::mat& mat, double coef = 1) {
-
-  arma::mat res = mat*coef;
-
-  arma::mat::iterator it = res.begin();
-
-  for (;it != res.end(); ++it) {
-    // std::cout << *it << std::endl;
-    *it = std::exp(*it);
-  }
-  return res;
-}
-
-
-double r_2_cpp(arma::mat data, arma::mat fit){
-  // cor ^ 2;
-  return 0.0;
-}
-
-
-double e_sorencen_cpp(arma::mat data, arma::mat fit ){
-
-  return 0.0;
-}
-
-
-// e_sorensen <- function(data, fit) {
-//   2*sum(apply(cbind(data %>% c
-//                       ,fit %>% c), MARGIN = 1, FUN = min))/(sum(data) + sum(fit))
-// }
-
-// function to turn a matrix into a sparse one using a threshold
-// to use in order to avoid computing flows for unrealistic values, for active travel 15 km seems a good fit
-arma::sp_mat mat_to_sparse(const arma::mat& x, double threshold = 15.0) {
-
-  arma::sp_mat res(x);
-
-  arma::sp_mat::iterator it = res.begin();
-
-  for(;it != res.end();++it) {
-    if (*it > threshold) {
-      *it = 0;
-    }
-  }
-  return res;
-}
-
-
 
 //'
 //'@title
@@ -150,74 +82,6 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
                             );
 }
 
-
-
-//'
-//'@description
-//'Apply function from R rewritten for sparse matrices in cpp to gain speed.
-//'
-//'
-//'@param mat1 The matrix to which the functino is applied
-//'@param vec the vector in which the result will be stored.
-//'@param dim 1 to perform the operation rowwise, 2 to perform on columnwise.
-//'
-//'@returns
-//'A vector, to which the sum function has been applied either by row or by column
-//'
-//'@examples
-//'library(Matrix)
-//'mat = matrix(data = c(1,2,3,1,2,3,1,2,3), nrow = 3,sparse = TRUE)
-//'
-//'res1 = apply_iter(mat,1)
-//'res2 = apply_iter(mat,2)
-//@export
-// [[Rcpp::export]]
-arma::vec apply_iter(const arma::sp_mat& x, int dim = 1) {
-
-  int n(0);
-  switch(dim) {
-  case 1:
-    n = x.n_rows;
-    break;
-  case 2:
-    n = x.n_cols;
-    break;
-  }
-  arma::vec result(n);
-  arma::sp_mat::const_iterator i = x.begin();
-  if (dim ==1){
-    for (; i != x.end(); ++i) {
-      result(i.row())+=*i;
-    }
-  } else if (dim == 2){
-    for (; i != x.end(); ++i) {
-      result(i.col())+=*i;
-    }
-  }
-  return result;
-}
-// void apply_cpp(arma::mat& mat1, arma::vec& res, int dim = 1) {
-//
-// // add checks whether the res dim matches.
-//   if (dim == 1) {
-//     // arma::vec res(mat1.n_rows);
-//
-//     for (int i = 0; i<mat1.n_rows; ++i) {
-//       res(i) = accu(mat1.row(i));
-//     }
-//
-//   } else if (dim == 2) {
-//     // arma::vec res(mat1.n_cols);
-//     for (int i = 0; i<mat1.n_cols; ++i) {
-//       res(i) = accu(mat1.col(i));
-//     }
-//
-//   } else {
-//     std::cout << "Enter either 1 or 2 for dimension" << std::endl;
-//   }
-// }
-
-
 //'
 //'@title
 //'Run model
@@ -246,7 +110,6 @@ List run_model_cpp(const arma::mat& flows
                  ,std::string type = "exp"){
 
   arma::mat f_c = mat_exp(distance, -beta_);
-  std::cout << "Cost function computed ! " << std::endl;
 
   // arma::vec O = apply_iter(flows,1);
   // // std::cout << "Computed O"<< std::endl;
@@ -258,104 +121,14 @@ List run_model_cpp(const arma::mat& flows
 
   Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
 
-  std::cout<< " Calibration over. " << std::endl;
-
   arma::vec A = A_B["A"];
   arma::vec B = A_B["B"];
 
   arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
 
-  std::cout<< " Values modelled " << std::endl;
-
   return Rcpp::List::create(Rcpp::Named("values") = flows_model);
 }
 
-
-
-// [[Rcpp::export]]
-List run_model_prod_cpp(const arma::sp_mat& flows
-                     ,const arma::mat& distance
-                     ,double beta = .25
-                     ,std::string type = "exp"){
-
-  //  simulating the production constrained model, when Oi is known.
-
-  // arma::mat f_c = mat_exp(distance, -beta);
-  // std::cout << "Cost function computed ! " << std::endl;
-  //
-  // arma::vec O = apply_iter(flows,1);
-  // // std::cout << "Computed O"<< std::endl;
-  // arma::vec D = apply_iter(flows,2);
-  // // std::cout << "Computed D"<< std::endl;
-  //
-  // Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
-  //
-  // std::cout<< " Calibration over. " << std::endl;
-  //
-  // arma::vec A = A_B["A"];
-  // arma::vec B = A_B["B"];
-  //
-  // arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
-  //
-  // std::cout<< " Values modelled " << std::endl;
-
-  return Rcpp::List::create(Rcpp::Named("values"));
-}
-
-
-
-// [[Rcpp::export]]
-List run_model_attr_cpp(const arma::mat& flows
-                          ,const arma::mat& distance
-                          ,double beta = .25
-                          ,std::string type = "exp"){
-
-  // simulating the attraction constrained model, when Dj is known
-
-  // arma::mat f_c = mat_exp(distance, -beta);
-  // std::cout << "Cost function computed ! " << std::endl;
-  //
-  // arma::vec O = apply_iter(flows,1);
-  // // std::cout << "Computed O"<< std::endl;
-  // arma::vec D = apply_iter(flows,2);
-  // // std::cout << "Computed D"<< std::endl;
-  //
-  // Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
-  //
-  // std::cout<< " Calibration over. " << std::endl;
-  //
-  // arma::vec A = A_B["A"];
-  // arma::vec B = A_B["B"];
-  //
-  // arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
-  //
-  // std::cout<< " Values modelled " << std::endl;
-
-  return Rcpp::List::create(Rcpp::Named("values"));
-}
-
-
-
-// [[Rcpp::export]]
-double pearsoncoeff(const arma::mat& X, const arma::mat& Y)
-{
-  // double sq_mean = arma::pow(Y.as_col() - arma::mean(Y.as_col()),2);
-  //
-  // double resid = arma::pow(X.as_col() - Y.as_col(),2);
-
-  return arma::as_scalar(arma::cor(X.as_col(),Y.as_col()));
-
-  // return 1.0 - arma::accu()/arma::accu();
-
-}
-
-double abs_val(double x) {
-
-  if (x >= 0){
-    return x;
-  }
-  return -x;
-}
 
 
 

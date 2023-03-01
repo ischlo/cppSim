@@ -25,28 +25,6 @@
 # function sketch :
 # https://cloud.r-project.org/doc/manuals/r-release/R-lang.html read for inspiration
 #
-# flows_matrix <- flows_mat
-#
-# region_data <- city
-#
-# run_name <- "test_from_to"
-
-#@import tmap
-#@import tmaptools
-#@import tidyverse
-#@import data.table
-#@import cppRouting
-#@import foreach foreach
-#@import doParallel
-#@import parallel
-#@importFrom units set_units
-#@import reshape2
-#@importFrom rlist list.load list.save
-#@importFrom sf st_geometry_type st_as_sf st_distance st_area
-#@import here here
-#@import parallel
-#NULL
-
 
 #'@title
 #'Running a whole simulation of a doubly constrained gravity model
@@ -103,13 +81,13 @@ simulation <- function(flows_matrix
 
 #'
 #'@title
-#'Running a model
+#'Running doubly constrained model
 #'
 #'@title
 #'Run model
 #'
 #'@description
-#'This function is the C++ implementation of run_model, it will run a model
+#'This function is the C++ implementation of run_model, it will run a doubly constrained model
 #'
 #'@param flows A integer matrix of Origin-Destination flows.
 #'@param distance a distance matrix between origins and destinations, provide distance in km.
@@ -157,6 +135,63 @@ run_model <- function(flows
 
 }
 
+
+
+#'
+#'@title
+#'Running a singly constrained model
+#'
+#'@description
+#'This function is the C++ implementation of run_model, it will run a singly constrained model
+#'there must be a match in the dimensions, when running a production constrained model,
+#'any(dim(distance) == length(flows)) must be TRUE
+#'if no values for weight are provided, a vector with ones is used
+#'
+#'@param flows A vector of either origin (production constrained) or destination (attraction constrained) flows.
+#'@param distance a distance matrix between origins and destinations, provide distance in km.
+#'@param weight a vector of weights for the unconstrained part of the model.
+#'@param beta Exponent to use when calculating the cost function, default .25.
+#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+#'
+#'@returns
+#'A list containing a matrix with predicted values.
+#'
+#'@examples
+#'
+#'data(flows_test)
+#'data(distance_test)
+#'
+#'flows_test <- apply(flows_test,MARGIN = 1,FUN = sum)
+#'
+#'model_test <- run_model_single(flows_test,distance_test)
+#'
+#'@export
+run_model_single <- function(flows
+                             ,distance
+                             ,weight = NULL
+                             ,beta = 0.25
+                             ,type = "exp"){
+
+  stopifnot(is.numeric(flows)
+            ,is.numeric(distance)
+            ,any(is.numeric(weight),is.null(weight))
+            ,any(length(flows) == dim(distance))
+            )
+
+  if(is.null(weight) & length(flows) == dim(distance)[1]) {
+    weight = rep_len(1, dim(distance)[2])
+  } else if(is.null(weight) & length(flows) == dim(distance)[2]) {
+    weight = rep_len(1, dim(distance)[1])
+  } else {
+    stop("provide flows that match one of the distance matrix dimensions.")
+  }
+
+
+  run_model_single_cpp(flow = flows
+                       ,weight = weight
+                       ,distance = distance
+                       ,beta = beta)
+}
 
 
 

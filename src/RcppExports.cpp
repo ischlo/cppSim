@@ -25,18 +25,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// apply_iter
-arma::vec apply_iter(const arma::sp_mat& x, int dim);
-RcppExport SEXP _cppSim_apply_iter(SEXP xSEXP, SEXP dimSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::sp_mat& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
-    rcpp_result_gen = Rcpp::wrap(apply_iter(x, dim));
-    return rcpp_result_gen;
-END_RCPP
-}
 // run_model_cpp
 List run_model_cpp(const arma::mat& flows, const arma::mat& distance, double beta_, double threshold, std::string type);
 RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP beta_SEXP, SEXP thresholdSEXP, SEXP typeSEXP) {
@@ -49,46 +37,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
     rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta_, threshold, type));
-    return rcpp_result_gen;
-END_RCPP
-}
-// run_model_prod_cpp
-List run_model_prod_cpp(const arma::sp_mat& flows, const arma::mat& distance, double beta, std::string type);
-RcppExport SEXP _cppSim_run_model_prod_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::sp_mat& >::type flows(flowsSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_model_prod_cpp(flows, distance, beta, type));
-    return rcpp_result_gen;
-END_RCPP
-}
-// run_model_attr_cpp
-List run_model_attr_cpp(const arma::mat& flows, const arma::mat& distance, double beta, std::string type);
-RcppExport SEXP _cppSim_run_model_attr_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type flows(flowsSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_model_attr_cpp(flows, distance, beta, type));
-    return rcpp_result_gen;
-END_RCPP
-}
-// pearsoncoeff
-double pearsoncoeff(const arma::mat& X, const arma::mat& Y);
-RcppExport SEXP _cppSim_pearsoncoeff(SEXP XSEXP, SEXP YSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    rcpp_result_gen = Rcpp::wrap(pearsoncoeff(X, Y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -106,15 +54,65 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// run_model_single_cpp
+List run_model_single_cpp(const arma::vec& flow, const arma::vec& weight, const arma::mat& distance, double beta, std::string type);
+RcppExport SEXP _cppSim_run_model_single_cpp(SEXP flowSEXP, SEXP weightSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec& >::type flow(flowSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
+    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(run_model_single_cpp(flow, weight, distance, beta, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// apply_iter
+arma::vec apply_iter(const arma::sp_mat& x, int dim);
+RcppExport SEXP _cppSim_apply_iter(SEXP xSEXP, SEXP dimSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::sp_mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< int >::type dim(dimSEXP);
+    rcpp_result_gen = Rcpp::wrap(apply_iter(x, dim));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pearsoncoeff
+double pearsoncoeff(const arma::mat& X, const arma::mat& Y);
+RcppExport SEXP _cppSim_pearsoncoeff(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(pearsoncoeff(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// abs_val
+double abs_val(double x);
+RcppExport SEXP _cppSim_abs_val(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(abs_val(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
-    {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},
     {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 5},
-    {"_cppSim_run_model_prod_cpp", (DL_FUNC) &_cppSim_run_model_prod_cpp, 4},
-    {"_cppSim_run_model_attr_cpp", (DL_FUNC) &_cppSim_run_model_attr_cpp, 4},
-    {"_cppSim_pearsoncoeff", (DL_FUNC) &_cppSim_pearsoncoeff, 2},
     {"_cppSim_run_simulation_cpp", (DL_FUNC) &_cppSim_run_simulation_cpp, 4},
+    {"_cppSim_run_model_single_cpp", (DL_FUNC) &_cppSim_run_model_single_cpp, 5},
+    {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},
+    {"_cppSim_pearsoncoeff", (DL_FUNC) &_cppSim_pearsoncoeff, 2},
+    {"_cppSim_abs_val", (DL_FUNC) &_cppSim_abs_val, 1},
     {NULL, NULL, 0}
 };
 
