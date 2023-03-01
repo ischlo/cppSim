@@ -2,6 +2,7 @@
 #include <strings.h>
 #include <cstdlib>
 #include <iterator>
+#include "support.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins("cpp11")]]
