@@ -7,9 +7,7 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins("cpp11")]]
 
-
 using namespace Rcpp;
-
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
@@ -40,8 +38,6 @@ using namespace Rcpp;
    }
    return res;
  }
-
-
 
  // function to turn a matrix into a sparse one using a threshold
  // to use in order to avoid computing flows for unrealistic values, for active travel 15 km seems a good fit

@@ -1,3 +1,17 @@
-CXX_STD = CXX11
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
-PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+# CXXSTD+=-std=c++11
+
+# PKG_LIBS=-lomp
+# PKG_CXXFLAGS=-Xclang -fopenmp
+
+# -Xpreprocessor
+# -L/usr/local/opt/libomp/lib -I/usr/local/opt/libomp/include
+
+
+#CC=clang
+#CXX=clang++
+
+#PKG_CFLAGS=-I/usr/local/opt/libomp/include
+#PKG_LIBS=-L/usr/local/opt/libomp/lib -lomp
+#PKG_CPPFLAGS=-I/usr/local/opt/libomp/include
+
+#SHLIB_CXXLD=clang++ -fopenmp

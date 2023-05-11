@@ -5,7 +5,7 @@
 #include "support.h"
 
 // [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins("cpp11")]]
+// [[Rcpp::plugins(cpp11)]]
 
 
 using namespace Rcpp;

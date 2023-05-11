@@ -3,5 +3,3 @@
 export(run_model)
 export(run_model_single)
 export(simulation)
-importFrom(Rcpp,sourceCpp)
-useDynLib(cppSim, .registration = TRUE)

@@ -4,13 +4,17 @@
 #include <iterator>
 #include "support.h"
 
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins("cpp11")]]
+#ifdef _OPENMP
+  #include <omp.h>
+#endif
 
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::plugins(openmp)]]
 
 using namespace Rcpp;
 
-//'
+//'@name calibration_cpp
 //'@title
 //'Calibrating the balancing factors
 //'
@@ -32,8 +36,8 @@ using namespace Rcpp;
 //'O = c(1,2,3)
 //'D = c(3,2,1)
 //'
-//'a_b = calibration_cpp(cost_fun,O,D)
-//@export
+//a_b = calibration_cpp(cost_fun,O,D)
+// @export
 // [[Rcpp::export]]
 Rcpp::List calibration_cpp(arma::mat cost_fun
                             ,arma::vec O
@@ -47,9 +51,10 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 
   NumericVector e;
   // std::cout << "Entering do loop" << std::endl;
+
   do {
 
-    //  wsa the fastest, but arma::sum seems slightly faster
+    //  was the fastest, but arma::sum seems slightly faster
     // // std::cout << "calculating A_new" << std::endl;
     // for(int j = 0; j < cost_fun.n_rows; ++j){
     //   A_new(j) = 1.0/arma::accu(B%D%cost_fun.row(j).as_col());
@@ -61,11 +66,8 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
     // }
 
     A_new = 1.0/arma::sum(arma::mat(cost_fun.each_row() % (B.t() % D.t())),1);
-
     B_new = 1.0/arma::sum(arma::mat(cost_fun.each_col() % (A_new % O)),0).as_col();
-
     ++i;
-
     eps = arma::accu(arma::norm(B-B_new, 1));
 
     A = A_new;
@@ -73,7 +75,7 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 
     e.push_back(eps);
 
-  } while (eps > delta & i < 50);
+  } while ((eps > delta) & (i < 50));
 
 
   return Rcpp::List::create(Rcpp::Named("A") = A
@@ -82,9 +84,8 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
                             );
 }
 
-//'
-//'@title
-//'Run model
+//'@name run_model_cpp
+//'@title Run model
 //'
 //'@description
 //'This function is the C++ implementation of run_model, it will run a model
@@ -101,13 +102,12 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //'b = 3
 //'a + b
 //'
-// @export
+//@export
 // [[Rcpp::export]]
-List run_model_cpp(const arma::mat& flows
-                 ,const arma::mat& distance
-                 ,double beta_ = .25
-                 ,double threshold = 15
-                 ,std::string type = "exp"){
+Rcpp::List run_model_cpp(const arma::mat& flows
+                     ,const arma::mat& distance
+                     ,double beta_ = .25
+                     ,std::string type = "exp"){
 
   arma::mat f_c = mat_exp(distance, -beta_);
 
@@ -119,7 +119,7 @@ List run_model_cpp(const arma::mat& flows
   arma::vec O = arma::sum(flows,1);
   arma::vec D = arma::sum(flows.t(),1);
 
-  Rcpp::List A_B = calibration_cpp(f_c,O,D, 0.001);
+  Rcpp::List A_B = calibration_cpp(f_c,O,D,0.001);
 
   arma::vec A = A_B["A"];
   arma::vec B = A_B["B"];
@@ -127,11 +127,10 @@ List run_model_cpp(const arma::mat& flows
   arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
 
   return Rcpp::List::create(Rcpp::Named("values") = flows_model);
+
 }
 
-
-
-
+//
 // this works !!
 // [[Rcpp::export]]
 List run_simulation_cpp(const arma::mat& distance

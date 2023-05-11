@@ -26,6 +26,7 @@
 # https://cloud.r-project.org/doc/manuals/r-release/R-lang.html read for inspiration
 #
 
+#'@name simulation
 #'@title
 #'Running a whole simulation of a doubly constrained gravity model
 #'@description
@@ -79,7 +80,7 @@ simulation <- function(flows_matrix
 }
 
 
-#'
+#'@name run_model
 #'@title
 #'Running doubly constrained model
 #'
@@ -93,7 +94,6 @@ simulation <- function(flows_matrix
 #'@param distance a distance matrix between origins and destinations, provide distance in km.
 #'@param beta Exponent to use when calculating the cost function.
 #'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
-#'
 #'@returns
 #'A list containing an integer matrix with predicted values.
 #'
@@ -108,7 +108,8 @@ simulation <- function(flows_matrix
 run_model <- function(flows
                       ,distance
                       ,beta = 0.25
-                      ,type = "exp") {
+                      ,type = "exp"
+                      ) {
 
   if(!is.matrix(flows) &
      !(typeof(flows) %in% c("integer"))) {
@@ -126,9 +127,19 @@ run_model <- function(flows
 
   if(!is.numeric(beta)) {
     stop("provide a numeric values for the beta parameter.")
-    }
+  }
 
-  run_model_cpp(flows #Matrix::Matrix(flows,sparse = TRUE)
+  # if(is.na(as.integer(ncores))) {
+  #   stop("PRovide an integer value for ncores.")
+  # }
+
+  # RcppParallel::setThreadOptions(numThreads = ncores)
+  #
+  # print(paste0("Running a model on "
+  #              ,ncores
+  #              ," cores."))
+
+  run_model_cpp(flows
                 ,distance
                 ,beta_ = beta
                 ,type = "exp")
@@ -137,7 +148,7 @@ run_model <- function(flows
 
 
 
-#'
+#'@name run_model_single
 #'@title
 #'Running a singly constrained model
 #'
