@@ -42,40 +42,39 @@ NULL
 #'a = 2
 #'b = 3
 #'a + b
-#'
 NULL
 
 calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
-    .Call('_cppSim_calibration_cpp', PACKAGE = 'cppSim', cost_fun, O, D, delta)
+    .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
-run_model_cpp <- function(flows, distance, beta_ = .25, type = "exp") {
-    .Call('_cppSim_run_model_cpp', PACKAGE = 'cppSim', flows, distance, beta_, type)
+run_model_cpp <- function(flows, distance, beta_, ncores_, type = "exp") {
+    .Call(`_cppSim_run_model_cpp`, flows, distance, beta_, ncores_, type)
 }
 
 run_simulation_cpp <- function(distance, flows, beta_orig = .25, type = "exp") {
-    .Call('_cppSim_run_simulation_cpp', PACKAGE = 'cppSim', distance, flows, beta_orig, type)
+    .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig, type)
 }
 
 #'
 NULL
 
 run_model_single_cpp <- function(flow, weight, distance, beta = .25, type = "exp") {
-    .Call('_cppSim_run_model_single_cpp', PACKAGE = 'cppSim', flow, weight, distance, beta, type)
+    .Call(`_cppSim_run_model_single_cpp`, flow, weight, distance, beta, type)
 }
 
 #'
 NULL
 
 apply_iter <- function(x, dim = 1L) {
-    .Call('_cppSim_apply_iter', PACKAGE = 'cppSim', x, dim)
+    .Call(`_cppSim_apply_iter`, x, dim)
 }
 
 pearsoncoeff <- function(X, Y) {
-    .Call('_cppSim_pearsoncoeff', PACKAGE = 'cppSim', X, Y)
+    .Call(`_cppSim_pearsoncoeff`, X, Y)
 }
 
 abs_val <- function(x) {
-    .Call('_cppSim_abs_val', PACKAGE = 'cppSim', x)
+    .Call(`_cppSim_abs_val`, x)
 }
 

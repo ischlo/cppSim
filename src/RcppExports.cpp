@@ -26,21 +26,22 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_model_cpp
-Rcpp::List run_model_cpp(const arma::mat& flows, const arma::mat& distance, double beta_, std::string type);
-RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP beta_SEXP, SEXP typeSEXP) {
+Rcpp::List run_model_cpp(const arma::mat& flows, const arma::mat& distance, double beta_, int ncores_, std::string type);
+RcppExport SEXP _cppSim_run_model_cpp(SEXP flowsSEXP, SEXP distanceSEXP, SEXP beta_SEXP, SEXP ncores_SEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type flows(flowsSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type distance(distanceSEXP);
     Rcpp::traits::input_parameter< double >::type beta_(beta_SEXP);
+    Rcpp::traits::input_parameter< int >::type ncores_(ncores_SEXP);
     Rcpp::traits::input_parameter< std::string >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta_, type));
+    rcpp_result_gen = Rcpp::wrap(run_model_cpp(flows, distance, beta_, ncores_, type));
     return rcpp_result_gen;
 END_RCPP
 }
 // run_simulation_cpp
-List run_simulation_cpp(const arma::mat& distance, const arma::mat& flows, double beta_orig, std::string type);
+Rcpp::List run_simulation_cpp(const arma::mat& distance, const arma::mat& flows, double beta_orig, std::string type);
 RcppExport SEXP _cppSim_run_simulation_cpp(SEXP distanceSEXP, SEXP flowsSEXP, SEXP beta_origSEXP, SEXP typeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -106,7 +107,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
-    {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 4},
+    {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 5},
     {"_cppSim_run_simulation_cpp", (DL_FUNC) &_cppSim_run_simulation_cpp, 4},
     {"_cppSim_run_model_single_cpp", (DL_FUNC) &_cppSim_run_model_single_cpp, 5},
     {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},

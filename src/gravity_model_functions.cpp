@@ -1,3 +1,6 @@
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::plugins(cpp11)]]
+
 #include <RcppArmadillo.h>
 #include <strings.h>
 #include <cstdlib>
@@ -7,10 +10,6 @@
 #ifdef _OPENMP
   #include <omp.h>
 #endif
-
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::plugins(openmp)]]
 
 using namespace Rcpp;
 
@@ -37,7 +36,7 @@ using namespace Rcpp;
 //'D = c(3,2,1)
 //'
 //a_b = calibration_cpp(cost_fun,O,D)
-// @export
+//@export
 // [[Rcpp::export]]
 Rcpp::List calibration_cpp(arma::mat cost_fun
                             ,arma::vec O
@@ -49,7 +48,7 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
   int i = 0;
   double eps = cost_fun.n_cols;
 
-  NumericVector e;
+  Rcpp::NumericVector e;
   // std::cout << "Entering do loop" << std::endl;
 
   do {
@@ -101,20 +100,19 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //'a = 2
 //'b = 3
 //'a + b
-//'
 //@export
 // [[Rcpp::export]]
 Rcpp::List run_model_cpp(const arma::mat& flows
-                     ,const arma::mat& distance
-                     ,double beta_ = .25
-                     ,std::string type = "exp"){
+                         ,const arma::mat& distance
+                         ,double beta_
+                         ,int ncores_
+                         ,std::string type = "exp"){
 
+
+  #ifdef _OPENMP
+    omp_set_num_threads(ncores_);
+  #endif
   arma::mat f_c = mat_exp(distance, -beta_);
-
-  // arma::vec O = apply_iter(flows,1);
-  // // std::cout << "Computed O"<< std::endl;
-  // arma::vec D = apply_iter(flows,2);
-  // // std::cout << "Computed D"<< std::endl;
 
   arma::vec O = arma::sum(flows,1);
   arma::vec D = arma::sum(flows.t(),1);
@@ -130,10 +128,11 @@ Rcpp::List run_model_cpp(const arma::mat& flows
 
 }
 
+
 //
-// this works !!
+//@export
 // [[Rcpp::export]]
-List run_simulation_cpp(const arma::mat& distance
+Rcpp::List run_simulation_cpp(const arma::mat& distance
                       ,const arma::mat& flows
                       ,double beta_orig = .25
                       ,std::string type = "exp"){
@@ -142,7 +141,7 @@ List run_simulation_cpp(const arma::mat& distance
   // trying to find the beta that maximisies the quality of fit function
 
   double beta_new = beta_orig + .05;
-  List res1, res2,res3;
+  Rcpp::List res1, res2,res3;
   double eps = 1.0;
   int i = 0;
   double step = 0.03;
@@ -151,16 +150,22 @@ do {
 
 
   res1 = run_model_cpp(flows
-                         ,distance
-                         ,beta_orig);
+                       ,distance
+                       ,beta_orig
+                       ,1
+                       ,"exp");
 
   res2 = run_model_cpp(flows
                          ,distance
-                         ,beta_orig + step);
+                         ,beta_orig + step
+                         ,1
+                         ,"exp");
 
   res3 = run_model_cpp(flows
                          ,distance
-                         ,beta_orig - step);
+                         ,beta_orig - step
+                         ,1
+                         ,"exp");
 
   double r2 = -pearsoncoeff(flows, res1["values"]);
 

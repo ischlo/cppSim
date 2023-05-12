@@ -93,6 +93,7 @@ simulation <- function(flows_matrix
 #'@param flows A integer matrix of Origin-Destination flows.
 #'@param distance a distance matrix between origins and destinations, provide distance in km.
 #'@param beta Exponent to use when calculating the cost function.
+#'@param ncores on how manz cores should the computation run in parallel, if OPENMP is found on the machine.
 #'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
 #'@returns
 #'A list containing an integer matrix with predicted values.
@@ -108,6 +109,7 @@ simulation <- function(flows_matrix
 run_model <- function(flows
                       ,distance
                       ,beta = 0.25
+                      ,ncores = 1
                       ,type = "exp"
                       ) {
 
@@ -129,24 +131,28 @@ run_model <- function(flows
     stop("provide a numeric values for the beta parameter.")
   }
 
-  # if(is.na(as.integer(ncores))) {
-  #   stop("PRovide an integer value for ncores.")
-  # }
+  if(is.na(as.integer(ncores))) {
+    print('Non integer value provided to ncores, using the default values of 1')
+    ncores <<- 1
+  } else if (ncores > RcppParallel::defaultNumThreads()) {
+    print('Value provided to ncores to big, using default of one')
+    ncores <<- 1
+  }
 
-  # RcppParallel::setThreadOptions(numThreads = ncores)
-  #
-  # print(paste0("Running a model on "
-  #              ,ncores
-  #              ," cores."))
+  print(paste0("Running a model on "
+               ,ncores
+               ," cores."))
 
-  run_model_cpp(flows
+  return(
+    run_model_cpp(flows
                 ,distance
-                ,beta_ = beta
-                ,type = "exp")
+                ,beta
+                ,ncores
+                ,type
+                )
+    )
 
 }
-
-
 
 #'@name run_model_single
 #'@title
