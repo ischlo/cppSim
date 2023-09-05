@@ -44,13 +44,10 @@ List run_model_single_cpp(const arma::vec& flow
   //
   arma::vec A = 1.0/arma::sum(arma::mat(f_c.each_row() % (weight.t())),1);
 
-  arma::mat T_model = ((A % flow) * weight.t()) % f_c;//arma::round()
+  arma::mat T_model = ((A % flow) * weight.t()) % f_c; //arma::round()
 
   return Rcpp::List::create(Rcpp::Named("values") = T_model);
 }
-
-
-
 
 // // [[Rcpp::export]]
 // List run_model_attr_cpp(const arma::vec& in_flow
