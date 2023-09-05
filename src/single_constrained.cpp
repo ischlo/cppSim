@@ -7,7 +7,6 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
-
 using namespace Rcpp;
 
 //'
@@ -45,7 +44,7 @@ List run_model_single_cpp(const arma::vec& flow
   //
   arma::vec A = 1.0/arma::sum(arma::mat(f_c.each_row() % (weight.t())),1);
 
-  arma::mat T_model = arma::round(((A % flow) * weight.t()) % f_c);
+  arma::mat T_model = ((A % flow) * weight.t()) % f_c;//arma::round()
 
   return Rcpp::List::create(Rcpp::Named("values") = T_model);
 }

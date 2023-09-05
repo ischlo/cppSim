@@ -52,20 +52,8 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
   double eps = cost_fun.n_cols;
 
   Rcpp::NumericVector e;
-  // std::cout << "Entering do loop" << std::endl;
 
   do {
-
-    //  was the fastest, but arma::sum seems slightly faster
-    // // std::cout << "calculating A_new" << std::endl;
-    // for(int j = 0; j < cost_fun.n_rows; ++j){
-    //   A_new(j) = 1.0/arma::accu(B%D%cost_fun.row(j).as_col());
-    // }
-    //
-    // // std::cout << "calculating B_new" << std::endl;
-    // for(int j = 0; j < cost_fun.n_cols; ++j){
-    //   B_new(j) = 1.0/arma::accu(A_new%O%cost_fun.col(j));
-    // }
 
     A_new = 1.0/arma::sum(arma::mat(cost_fun.each_row() % (B.t() % D.t())),1);
     B_new = 1.0/arma::sum(arma::mat(cost_fun.each_col() % (A_new % O)),0).as_col();
@@ -125,7 +113,7 @@ Rcpp::List run_model_cpp(const arma::mat& flows
   arma::vec A = A_B["A"];
   arma::vec B = A_B["B"];
 
-  arma::mat flows_model = arma::round( (A * B.as_row()) % (O * D.as_row()) % f_c);
+  arma::mat flows_model = (A * B.as_row()) % (O * D.as_row()) % f_c; // arma::round( )
 
   return Rcpp::List::create(Rcpp::Named("values") = flows_model);
 
