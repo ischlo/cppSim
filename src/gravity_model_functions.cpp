@@ -113,7 +113,7 @@ Rcpp::List run_model_cpp(const arma::mat& flows
 
   #ifdef _OPENMP
     omp_set_num_threads(ncores_);
-    std::cout << "using multiple cores " << std::endl;
+    // std::cout << "using multiple cores " << std::endl;
   #endif
   arma::mat f_c = mat_exp(distance, -beta_);
 
@@ -148,6 +148,11 @@ Rcpp::List run_simulation_cpp(const arma::mat& distance
   double eps = 1.0;
   int i = 0;
   double step = 0.03;
+
+  //#ifdef _OPENMP
+    //omp_set_num_threads(ncores_);
+    // std::cout << "using multiple cores " << std::endl;
+  //#endif
 
 do {
 
