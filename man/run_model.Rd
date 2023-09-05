@@ -4,7 +4,7 @@
 \alias{run_model}
 \title{Running doubly constrained model}
 \usage{
-run_model(flows, distance, beta = 0.25, ncores = 1, type = "exp")
+run_model(flows, distance, beta = 0.25)
 }
 \arguments{
 \item{flows}{A integer matrix of Origin-Destination flows.}
@@ -12,10 +12,6 @@ run_model(flows, distance, beta = 0.25, ncores = 1, type = "exp")
 \item{distance}{a distance matrix between origins and destinations, provide distance in km.}
 
 \item{beta}{Exponent to use when calculating the cost function.}
-
-\item{ncores}{on how manz cores should the computation run in parallel, if OPENMP is found on the machine.}
-
-\item{type}{The only type of cost function currently implemented is exponential, parameter value "exp".}
 }
 \value{
 A list containing an integer matrix with predicted values.

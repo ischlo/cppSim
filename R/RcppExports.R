@@ -34,26 +34,23 @@ NULL
 #'@param flows A integer matrix of Origin-Destination flows.
 #'@param distance a distance matrix between origins and destinations.
 #'@param beta Exponent to use when calculating the cost function.
-#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+NULL
+
 #'
 #'@returns
 #'A list containing an integer matrix with predicted values.
-#'@examples
-#'a = 2
-#'b = 3
-#'a + b
 NULL
 
 calibration_cpp <- function(cost_fun, O, D, delta = 0.05) {
     .Call(`_cppSim_calibration_cpp`, cost_fun, O, D, delta)
 }
 
-run_model_cpp <- function(flows, distance, beta_, ncores_, type = "exp") {
-    .Call(`_cppSim_run_model_cpp`, flows, distance, beta_, ncores_, type)
+run_model_cpp <- function(flows, distance, beta_, ncores_ = 4L) {
+    .Call(`_cppSim_run_model_cpp`, flows, distance, beta_, ncores_)
 }
 
-run_simulation_cpp <- function(distance, flows, beta_orig = .25, type = "exp") {
-    .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig, type)
+run_simulation_cpp <- function(distance, flows, beta_orig = .25) {
+    .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig)
 }
 
 #'

@@ -4,7 +4,7 @@
 \alias{run_model_single}
 \title{Running a singly constrained model}
 \usage{
-run_model_single(flows, distance, weight = NULL, beta = 0.25, type = "exp")
+run_model_single(flows, distance, weight = NULL, beta = 0.25)
 }
 \arguments{
 \item{flows}{A vector of either origin (production constrained) or destination (attraction constrained) flows.}
@@ -14,8 +14,6 @@ run_model_single(flows, distance, weight = NULL, beta = 0.25, type = "exp")
 \item{weight}{a vector of weights for the unconstrained part of the model.}
 
 \item{beta}{Exponent to use when calculating the cost function, default .25.}
-
-\item{type}{The only type of cost function currently implemented is exponential, parameter value "exp".}
 }
 \value{
 A list containing a matrix with predicted values.

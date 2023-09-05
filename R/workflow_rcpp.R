@@ -39,7 +39,7 @@
 #'@param flows_matrix a integer matrix of flows
 #'@param dist_matrix a distance matrix containing numeric values in kilometers
 #'@param beta_offset an offset from 0 from which to start looking for the best fit value.
-#'@param cost_fun type of cost function
+#@param cost_fun type of cost function
 #'
 #'@returns creates a folder based on the run_name parameter to which images and files are written.
 #' The file run_name_best_fit.rds contain the matrices with values from the model
@@ -51,27 +51,22 @@
 #'data(distance_test)
 #'
 #'model <- simulation(flows_test,distance_test)
+#'
 #'@export
 simulation <- function(flows_matrix
                        ,dist_matrix
                        ,beta_offset = .25
-                       ,cost_fun = "exp"
                        ) {
+  # ,cost_fun = "exp" # develop in a future version the possibility to provide a custom cost function.
   # run name is a prefix to include in the name of saved files
 
   # CHECK VARIABLES PROVIDED TO SUBMIT TO CPP
 
-  stopifnot(any(class(flows_matrix) == "matrix")
-            ,typeof(flows_matrix) == "integer"
-            ,any(class(dist_matrix) == "matrix")
+  stopifnot(inherits(flows_matrix,"matrix")
+            ,inherits(dist_matrix,"matrix")
             ,mode(dist_matrix) == "numeric"
-            ,is.numeric(beta_offset)) # other checks to add if networks are provided
-
-  # HERE CAN BE ADDED THE ROUTING PART FOR MODELS THAT ARE NOT TO BIG (100 OD NODES FOR EXAMPLE)
-  # ,WHERE THE ROUTING CAN BE DONE LOCALLY AS WELL IF AN APPROPRIATE DATA SET TO CONSTRUCT THE GRAPH IS PROVIDED
-  # OVERALL SHOULD BE MUCH SIMPLER THAN THE R VERSION IN THE OTHER PROJECT.
-  #### GRAVITY MODEL STUFF
-  # key values : for an exponential cost function,
+            ,is.numeric(beta_offset) & beta_offset >= 0
+            ,all(dim(flows_matrix)==dim(dist_matrix))) # other checks to add if networks are provided
 
   return(run_simulation_cpp(dist_matrix
                      ,flows_matrix
@@ -93,8 +88,8 @@ simulation <- function(flows_matrix
 #'@param flows A integer matrix of Origin-Destination flows.
 #'@param distance a distance matrix between origins and destinations, provide distance in km.
 #'@param beta Exponent to use when calculating the cost function.
-#'@param ncores on how manz cores should the computation run in parallel, if OPENMP is found on the machine.
-#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+#@param ncores on how manz cores should the computation run in parallel, if OPENMP is found on the machine.
+#@param type The only type of cost function currently implemented is exponential, parameter value "exp".
 #'@returns
 #'A list containing an integer matrix with predicted values.
 #'
@@ -109,46 +104,36 @@ simulation <- function(flows_matrix
 run_model <- function(flows
                       ,distance
                       ,beta = 0.25
-                      ,ncores = 1
-                      ,type = "exp"
                       ) {
 
-  if(!is.matrix(flows) &
-     !(typeof(flows) %in% c("integer"))) {
-    stop("provide a matrix with integers for flows, you can force the data type with 'as.integer(flows)'")
+  ncores = 1 # currently, ncores is 1 until i figure out how to enable openmp through rcppArmadillo
+
+  stopifnot(is.matrix(flows)
+            ,is.matrix(distance) & is.numeric(distance)
+            ,is.numeric(beta) & beta > 0
+            ,all(dim(flows)==dim(distance)))
+
+  if(mode(flows)!='integer'){
+    flows <- `mode<-`(flows,'integer')
+    cat('Converting flows to integers by retaining the whole part of each value.')
   }
 
-  if(!is.matrix(distance) &
-     !(is.numeric(distance))) {
-    stop("provide a matrix with numeric values for the distance.")
-  }
+  # if(is.na(as.integer(ncores))) {
+  #   print('Non integer value provided to ncores, using the default values of 1')
+  #   ncores <<- 1
+  # } else if (ncores > RcppParallel::defaultNumThreads()) {
+  #   print('Value provided to ncores to big, using default of one')
+  #   ncores <<- 1
+  # }
 
-  if(!(type %in% c("exp","pow"))) {
-    stop("the type of cost function is either 'exp' for exponential or 'pow' for power law.")
-  }
-
-  if(!is.numeric(beta)) {
-    stop("provide a numeric values for the beta parameter.")
-  }
-
-  if(is.na(as.integer(ncores))) {
-    print('Non integer value provided to ncores, using the default values of 1')
-    ncores <<- 1
-  } else if (ncores > RcppParallel::defaultNumThreads()) {
-    print('Value provided to ncores to big, using default of one')
-    ncores <<- 1
-  }
-
-  print(paste0("Running a model on "
-               ,ncores
-               ," cores."))
+  # print(paste0("Running a model on "
+  #              ,ncores
+  #              ," cores."))
 
   return(
     run_model_cpp(flows
                 ,distance
                 ,beta
-                ,ncores
-                ,type
                 )
     )
 
@@ -168,7 +153,7 @@ run_model <- function(flows
 #'@param distance a distance matrix between origins and destinations, provide distance in km.
 #'@param weight a vector of weights for the unconstrained part of the model.
 #'@param beta Exponent to use when calculating the cost function, default .25.
-#'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+#@param type The only type of cost function currently implemented is exponential, parameter value "exp".
 #'
 #'@returns
 #'A list containing a matrix with predicted values.
@@ -187,7 +172,7 @@ run_model_single <- function(flows
                              ,distance
                              ,weight = NULL
                              ,beta = 0.25
-                             ,type = "exp"){
+                             ){
 
   stopifnot(is.numeric(flows)
             ,is.numeric(distance)
@@ -199,15 +184,14 @@ run_model_single <- function(flows
     weight = rep_len(1, dim(distance)[2])
   } else if(is.null(weight) & length(flows) == dim(distance)[2]) {
     weight = rep_len(1, dim(distance)[1])
-  } else {
+  } else if (is.null(weight)){
     stop("provide flows that match one of the distance matrix dimensions.")
   }
 
-
-  run_model_single_cpp(flow = flows
+  return(run_model_single_cpp(flow = flows
                        ,weight = weight
                        ,distance = distance
-                       ,beta = beta)
+                       ,beta = beta))
 }
 
 

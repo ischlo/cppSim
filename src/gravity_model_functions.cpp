@@ -7,6 +7,9 @@
 #include <iterator>
 #include "support.h"
 
+
+#define ARMA_USE_OPENMP true
+
 #ifdef _OPENMP
   #include <omp.h>
 #endif
@@ -92,25 +95,25 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //'@param flows A integer matrix of Origin-Destination flows.
 //'@param distance a distance matrix between origins and destinations.
 //'@param beta Exponent to use when calculating the cost function.
-//'@param type The only type of cost function currently implemented is exponential, parameter value "exp".
+//@param type The only type of cost function currently implemented is exponential, parameter value "exp".
 //'
 //'@returns
 //'A list containing an integer matrix with predicted values.
-//'@examples
-//'a = 2
-//'b = 3
-//'a + b
+//@examples
+//a = 2
+//b = 3
+//a + b
 //@export
 // [[Rcpp::export]]
 Rcpp::List run_model_cpp(const arma::mat& flows
                          ,const arma::mat& distance
                          ,double beta_
-                         ,int ncores_
-                         ,std::string type = "exp"){
+                         ,int ncores_ = 4){
 
 
   #ifdef _OPENMP
     omp_set_num_threads(ncores_);
+    std::cout << "using multiple cores " << std::endl;
   #endif
   arma::mat f_c = mat_exp(distance, -beta_);
 
@@ -134,9 +137,9 @@ Rcpp::List run_model_cpp(const arma::mat& flows
 // [[Rcpp::export]]
 Rcpp::List run_simulation_cpp(const arma::mat& distance
                       ,const arma::mat& flows
-                      ,double beta_orig = .25
-                      ,std::string type = "exp"){
+                      ,double beta_orig = .25){
 
+  //,std::string type = "exp"
   // Newton method to find maxima here
   // trying to find the beta that maximisies the quality of fit function
 
@@ -153,19 +156,19 @@ do {
                        ,distance
                        ,beta_orig
                        ,1
-                       ,"exp");
+                       );
 
   res2 = run_model_cpp(flows
                          ,distance
                          ,beta_orig + step
                          ,1
-                         ,"exp");
+                         );
 
   res3 = run_model_cpp(flows
                          ,distance
                          ,beta_orig - step
                          ,1
-                         ,"exp");
+                         );
 
   double r2 = -pearsoncoeff(flows, res1["values"]);
 

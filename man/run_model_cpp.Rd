@@ -9,17 +9,7 @@
 \item{distance}{a distance matrix between origins and destinations.}
 
 \item{beta}{Exponent to use when calculating the cost function.}
-
-\item{type}{The only type of cost function currently implemented is exponential, parameter value "exp".}
-}
-\value{
-A list containing an integer matrix with predicted values.
 }
 \description{
 This function is the C++ implementation of run_model, it will run a model
-}
-\examples{
-a = 2
-b = 3
-a + b
 }

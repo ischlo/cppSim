@@ -4,7 +4,7 @@
 \alias{simulation}
 \title{Running a whole simulation of a doubly constrained gravity model}
 \usage{
-simulation(flows_matrix, dist_matrix, beta_offset = 0.25, cost_fun = "exp")
+simulation(flows_matrix, dist_matrix, beta_offset = 0.25)
 }
 \arguments{
 \item{flows_matrix}{a integer matrix of flows}
@@ -12,8 +12,6 @@ simulation(flows_matrix, dist_matrix, beta_offset = 0.25, cost_fun = "exp")
 \item{dist_matrix}{a distance matrix containing numeric values in kilometers}
 
 \item{beta_offset}{an offset from 0 from which to start looking for the best fit value.}
-
-\item{cost_fun}{type of cost function}
 }
 \value{
 creates a folder based on the run_name parameter to which images and files are written.
@@ -33,4 +31,5 @@ data(flows_test)
 data(distance_test)
 
 model <- simulation(flows_test,distance_test)
+
 }
