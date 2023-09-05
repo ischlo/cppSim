@@ -113,10 +113,10 @@ run_model <- function(flows
             ,is.numeric(beta) & beta > 0
             ,all(dim(flows)==dim(distance)))
 
-  if(mode(flows)!='integer'){
-    flows <- `mode<-`(flows,'integer')
-    cat('Converting flows to integers by retaining the whole part of each value.')
-  }
+  # if(mode(flows)!='integer'){
+  #   flows <- `mode<-`(flows,'integer')
+  #   cat('Converting flows to integers by retaining the whole part of each value.')
+  # }
 
   # if(is.na(as.integer(ncores))) {
   #   print('Non integer value provided to ncores, using the default values of 1')
