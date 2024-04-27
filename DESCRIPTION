@@ -7,6 +7,7 @@ Authors@R:
 Description: This package builds on top of RcppArmadillo to provide an API to do fast spatial interaction models in the context of urban analytics, geography, transport modelling. It uses the Newton root search algorithm to determine the optimal cost exponent and can run country level models with thousands of origins and destinations. It aims at implementing an easy approach based on matrices. Currently, the simplest form of production, destination and doubly constrained models are implemented. 
 License: MIT + file LICENSE
 Encoding: UTF-8
+URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
