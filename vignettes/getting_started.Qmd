@@ -1,0 +1,133 @@
+---
+title: "Getting started with cppSim"
+# output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{getting_started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+format:
+  html:
+    toc: true
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+The `cppSim` package was developed in order to have the possibility to do spatial interaction models at scale on a regular spec machine. The few existing packages proposing similar functionality tend to prioritize the different functionalities, and end up being suited for small models, say a few dozen origins and destinations. But what if you want to analyse a whole city, region, or even country with potentially hundreds or thousands of ODs ? This is where `cppSim` steps in. This vignette will present a typical set up one might have when doing SIMs. And to keep it simple, we will focus only on the modelling part. This means we will cover the steps of getting data, building a network, routing in another, longer article. We will use the data sets that come with this package to demonstrate power of `cppSim`.
+
+# Set up
+
+Let's install and import the library and the data sets.
+```{r setup}
+# remotes::install_github('ischlo/cppSim')
+
+library(cppSim)
+
+data("distance_test")
+data("flows_test")
+```
+
+The two data sets provided consist in the flow matrix `flows_test` with cycling and walking flows combined between every MSOA in Greater London. The data was obtained from the 2011 UK census open data portal. The second matrix is a distance matrix between the centroids of every MSOAs in Greater London. It was computed using the great [`cppRouting`](https://github.com/vlarmet/cppRouting) package and OpenStreetMap networks adapted to be suitable for cycling and walking. The networks can be downloaded in a good format with the python package `OSMnx`, or with the recently published, but yet under development [`cppRnet`]() package in R
+
+Let's have a look at the size of these:
+```{r}
+
+dim(distance_test)
+dim(flows_test)
+
+```
+
+And the data is distributed in the following way:
+
+```{r echo=FALSE}
+#| column: page
+#| layout-nrow: 1
+ 
+hist(distance_test,breaks = 50, main = 'Distribution of distances',xlab = 'OD distance')
+hist(flows_test,breaks = 50, main = 'Distribution of flows', xlab = 'flow')
+
+```
+
+# Visualisation
+MAPS HERE
+<!-- Let us also make some functions to visualise our region of interest. -->
+```{r}
+
+```
+
+# Model
+
+If the dumping coefficient of the distance decay (cost) function is known, one can simply run:
+```{r}
+
+beta <- .1
+
+res_model <- cppSim::run_model(flows = flows_test
+                         ,distance = distance_test
+                         ,beta = beta)
+
+str(res_model)
+
+dim(res_model$values)
+
+```
+
+Let's have a look at the correlation between the model output and data:
+
+```{r echo=FALSE}
+plot(c(res_model$values)
+    ,c(flows_test)
+    ,main = 'Model vs Data')
+
+```
+
+
+```{r}
+cor(c(res_model$values)
+    ,c(flows_test))
+
+```
+
+the correlation is already high, but we can do better, for that, we will need to calibrate the model. This is done with the `simulation` function, it will find the optimal cost function that gives the best fit. 
+
+## Simulation
+
+If you want to run a full simulation that will calibrate a model and determine the optimal distance decay coefficient, do the following:
+
+```{r}
+
+res_sim <- cppSim::simulation(flows_matrix = flows_test
+                          ,dist_matrix = distance_test
+)
+
+str(res_sim)
+
+res_sim$best_fit_beta
+
+```
+The output will be a list with two elements, first the output of a model run that best fits the observed data. Second, the optimal distance decay exponent that produces this result. This value will be relevant for further modelling. Let's see some of the model results:
+
+```{r}
+plot(res_sim$best_fit_values,flows_test
+     # ,log = 'xy'
+     ,main = 'Model vs Data')
+```
+
+Let's see how the model output corelates with the observed data:
+
+```{r}
+cor(x=c(res_sim$best_fit_values)
+    ,y=c(flows_test))
+
+```
+
+<!-- # Conclusion -->
+
+
