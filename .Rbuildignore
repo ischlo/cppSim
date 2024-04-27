@@ -3,3 +3,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^cppSim\.Rproj$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
