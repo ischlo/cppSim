@@ -31,6 +31,8 @@ library(cppSim)
 
 data("distance_test")
 data("flows_test")
+data("london_msoa")
+
 ```
 
 The two data sets provided consist in the flow matrix `flows_test` with cycling and walking flows combined between every MSOA in Greater London. The data was obtained from the 2011 UK census open data portal. The second matrix is a distance matrix between the centroids of every MSOAs in Greater London. It was computed using the great [`cppRouting`](https://github.com/vlarmet/cppRouting) package and OpenStreetMap networks adapted to be suitable for cycling and walking. The networks can be downloaded in a good format with the python package `OSMnx`, or with the recently published, but yet under development [`cppRnet`]() package in R
@@ -45,6 +47,7 @@ dim(flows_test)
 ```
 
 ```{r echo=FALSE, fig.show='hold', out.width="45%"}
+
 par(cex=.6)
 plot(density(distance_test), main = 'Distribution of distances',xlab = 'OD distance (km)')
 plot(density(flows_test), main = 'Distribution of flows', xlab = 'flow',log="x")
@@ -53,9 +56,12 @@ plot(density(flows_test), main = 'Distribution of flows', xlab = 'flow',log="x")
 
 # Visualisation
 
-MAPS HERE <!-- Let us also make some functions to visualise our region of interest. -->
+```{r, include=FALSE,eval=TRUE,echo=FALSE}
 
-```{r}
+london_msoa |> 
+  sf::st_as_sf(wkt = ncol(london_msoa),crs=4326) |> 
+  sf::st_geometry() |> 
+  plot(main="London MSOAs")
 
 ```
 
@@ -113,7 +119,8 @@ res_sim$best_fit_beta
 The output will be a list with two elements, first the output of a model run that best fits the observed data. Second, the optimal distance decay exponent that produces this result. This value will be relevant for further modelling. Let's see some of the model results:
 
 ```{r}
-plot(res_sim$best_fit_values,flows_test
+plot(res_sim$best_fit_values
+     ,flows_test
      # ,log = 'xy'
      ,main = 'Model vs Data')
 ```

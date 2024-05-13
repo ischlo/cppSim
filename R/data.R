@@ -16,3 +16,13 @@
 #'
 #' @source Ivann Schlosser, 2022
 "distance_test"
+
+
+#' london_msoa
+#'
+#' @format ## `london_msoa`
+#' A data.table with London MSOA, their centroids and geometries
+#'
+#'
+#' @source ONS, Office for National Statistics, 2011
+"london_msoa"

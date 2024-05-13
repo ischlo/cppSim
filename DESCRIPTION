@@ -12,7 +12,8 @@ URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
-    Rcpp
+    Rcpp,
+    sf
 LinkingTo: 
     Rcpp,
     RcppArmadillo
