@@ -8,3 +8,4 @@
 ^docs$
 ^pkgdown$
 ^vignettes/*_files$
+^cran-comments\.md$

@@ -39,7 +39,6 @@ using namespace Rcpp;
 //'D = c(3,2,1)
 //'
 //a_b = calibration_cpp(cost_fun,O,D)
-//@export
 // [[Rcpp::export]]
 Rcpp::List calibration_cpp(arma::mat cost_fun
                             ,arma::vec O
@@ -91,7 +90,6 @@ Rcpp::List calibration_cpp(arma::mat cost_fun
 //a = 2
 //b = 3
 //a + b
-//@export
 // [[Rcpp::export]]
 Rcpp::List run_model_cpp(const arma::mat& flows
                          ,const arma::mat& distance
@@ -121,7 +119,6 @@ Rcpp::List run_model_cpp(const arma::mat& flows
 
 
 //
-//@export
 // [[Rcpp::export]]
 Rcpp::List run_simulation_cpp(const arma::mat& distance
                       ,const arma::mat& flows
