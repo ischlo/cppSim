@@ -4,4 +4,4 @@
 
 # Latest 0.1
 
-I am working on vignettes and better documentation. There will be one short vignette covering strictly the functionality of the package and one longer vignette or blog post that covers an example project from scratch, starting with the network, flows, routing etc... 
+A vignette now introduces the minimal workflow using `cppSim`, a soon to be published one will cover a set up from scratch with network and routing steps.  
