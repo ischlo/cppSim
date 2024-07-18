@@ -52,6 +52,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_found_openmp
+bool cpp_found_openmp();
+RcppExport SEXP _cppSim_cpp_found_openmp() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(cpp_found_openmp());
+    return rcpp_result_gen;
+END_RCPP
+}
 // run_model_single_cpp
 List run_model_single_cpp(const arma::vec& flow, const arma::vec& weight, const arma::mat& distance, double beta, std::string type);
 RcppExport SEXP _cppSim_run_model_single_cpp(SEXP flowSEXP, SEXP weightSEXP, SEXP distanceSEXP, SEXP betaSEXP, SEXP typeSEXP) {
@@ -107,6 +117,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cppSim_calibration_cpp", (DL_FUNC) &_cppSim_calibration_cpp, 4},
     {"_cppSim_run_model_cpp", (DL_FUNC) &_cppSim_run_model_cpp, 4},
     {"_cppSim_run_simulation_cpp", (DL_FUNC) &_cppSim_run_simulation_cpp, 3},
+    {"_cppSim_cpp_found_openmp", (DL_FUNC) &_cppSim_cpp_found_openmp, 0},
     {"_cppSim_run_model_single_cpp", (DL_FUNC) &_cppSim_run_model_single_cpp, 5},
     {"_cppSim_apply_iter", (DL_FUNC) &_cppSim_apply_iter, 2},
     {"_cppSim_pearsoncoeff", (DL_FUNC) &_cppSim_pearsoncoeff, 2},

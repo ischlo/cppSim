@@ -6,13 +6,19 @@
 #'Calibrating the balancing factors
 #'
 #'@description
-#'Function to calibrate the A and B coefficients of the gravity model through an iterative process.
-#'To avoid infinite loop, the maximum number of iterations is fixed to 50, it usually takes around 5-7 iterations.
-#'to converge.
+#'Function to calibrate the A and B coefficients of the gravity model through
+NULL
+
 #'
-#'@param cost_fun The matrix representing the cost function f(D), where D is the distance matrix.
-#'@param O A numeric column vector of weights associated to the origin, the production constraint, usually the outbound flow.
-#'@param D A numeric row vector of destination weights, the attraction constraint.
+#'@param cost_fun The matrix representing the cost function f(D), where D is
+NULL
+
+#'@param O A numeric column vector of weights associated to the origin, the
+NULL
+
+#'@param D A numeric row vector of destination weights, the attraction
+NULL
+
 #'@param delta The error term we can tolerate on the convergence of the values.
 #'
 #'@returns A list object containing the A and B vectors of coefficients
@@ -51,6 +57,14 @@ run_model_cpp <- function(flows, distance, beta_, ncores_ = 4L) {
 
 run_simulation_cpp <- function(distance, flows, beta_orig = .25) {
     .Call(`_cppSim_run_simulation_cpp`, distance, flows, beta_orig)
+}
+
+#'
+#'Function to check availability of OPENMP to run in parallel.
+#'If openmp is found, this function returns TRUE
+#'
+cpp_found_openmp <- function() {
+    .Call(`_cppSim_cpp_found_openmp`)
 }
 
 #'

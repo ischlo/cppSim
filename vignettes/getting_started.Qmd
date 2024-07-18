@@ -2,7 +2,7 @@
 title: "Getting started with cppSim"
 # output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{getting_started}
+  %\VignetteIndexEntry{Getting started with cppSim}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 format:
@@ -121,7 +121,7 @@ plot(res_sim$best_fit_values,flows_test
      ,main = 'Model vs Data')
 ```
 
-Let's see how the model output corelates with the observed data:
+Let's see how the model output correlates with the observed data:
 
 ```{r}
 cor(x=c(res_sim$best_fit_values)

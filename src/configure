@@ -1,0 +1,3 @@
+# ARMADILLO_LIBS = `pkg-config --libs armadillo`
+# PKG_CPPFLAGS := -I$(HOMEBREW_PREFIX)/opt/armadillo/include  # Adjust path based on Homebrew installation
+# LDFLAGS += $(ARMADILLO_LIBS)
