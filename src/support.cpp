@@ -19,13 +19,13 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 
 
+//'@name mat_exp
+//'@description
+//'Function to take the exponential of each element of a matrix individually.
+//'If an element is x, this function returns exp(coef*x)
+//' @param mat A numeric matrix
+//' @param coef The exponent
 //'
- //'Function to take the exponential of each element of a matrix individually.
- //'If an element is x, this function returns exp(coef*x)
- //' @param mat A numeric matrix
- //' @param coef The exponent
- //'
- //'
  arma::mat mat_exp(const arma::mat& mat, double coef = 1) {
 
    arma::mat res = mat*coef;

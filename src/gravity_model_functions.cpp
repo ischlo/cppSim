@@ -1,11 +1,12 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::plugins(cpp11)]]
 
-#include "support.h"
+
 #include <RcppArmadillo.h>
 #include <cstdlib>
 #include <iterator>
 #include <strings.h>
+#include "support.h"
 
 #define ARMA_USE_OPENMP true
 

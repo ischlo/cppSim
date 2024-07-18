@@ -74,6 +74,12 @@ run_model_single_cpp <- function(flow, weight, distance, beta = .25, type = "exp
     .Call(`_cppSim_run_model_single_cpp`, flow, weight, distance, beta, type)
 }
 
+#'@name mat_exp
+#'@description
+#'Function to take the exponential of each element of a matrix individually.
+#'If an element is x, this function returns exp(coef*x)
+#' @param mat A numeric matrix
+#' @param coef The exponent
 #'
 NULL
 
