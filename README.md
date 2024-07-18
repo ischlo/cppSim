@@ -4,6 +4,16 @@
 # cppSim
 
 <!-- badges: start -->
+
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+
+![](https://github.com/ischlo/cppSim/actions/workflows/check-standard.yaml/badge.svg)
+
+![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg)
+
+![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg)
+
 <!-- badges: end -->
 
 This package is in its early versions of development, it aims at
@@ -22,6 +32,8 @@ with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("ischlo/cppSim")
+
+# pak::pak("ischlo/cppSim")
 ```
 
 ## Built in data sets
@@ -50,8 +62,10 @@ data("flows_test")
 data("distance_test")
 
 
-model_test <- run_model(flows = flows_test
-                        ,distance = distance_test)
+model_test <- run_model(
+  flows = flows_test,
+  distance = distance_test
+)
 ```
 
 ## Performance
