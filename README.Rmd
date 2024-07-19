@@ -97,7 +97,8 @@ Compared to the equivalent functions implemented in pure R, it runs about x10 fa
 
 ```{r performance,eval=TRUE,include=TRUE,echo = FALSE}
 
-bench <- rlist::list.load("benchmark_test.rds")
+bench <- system.file("extdata","benchmark_test.rds",package = "cppSim")
+  # rlist::list.load("benchmark_test.rds")
 
 print(bench)
 

@@ -110,9 +110,7 @@ Compared to the equivalent functions implemented in pure R, it runs
 about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is
 increasignly more significant as matrices get bigger.
 
-    #>      test replications elapsed relative user.self sys.self user.child sys.child
-    #> 2     cpp           10   3.257    1.000     3.046    0.184          0         0
-    #> 1 regular           10  34.201   10.501    31.887    1.970          0         0
+    #> [1] ""
 
 ## References
 
