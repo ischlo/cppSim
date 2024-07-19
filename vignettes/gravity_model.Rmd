@@ -23,16 +23,16 @@ library(rlist)
 library(data.table)
 library(foreach)
 
-source("support/gravity_model_functions.R")
+source("gravity_model_functions.R")
 
 ```
 
 
 ```{r load_data}
 
-flows_matrix <- list.load("gravity_model_files/flows_matrix.rds")
+flows_matrix <- list.load("flows_matrix.rds")
 
-msoa_graph_dist <- list.load("gravity_model_files/msoa_graph_dist.rds")
+msoa_graph_dist <- list.load("msoa_graph_dist.rds")
 
 msoa_graph_dist <- (msoa_graph_dist/1000/14) |> round()
 
@@ -169,7 +169,7 @@ lines(seq_len(max(run_best_fit$values))
 
 ## MODEL USING THE GLM And POISSON DISTRIBUTION
 
-flows_london <- rlist::list.load("gravity_model_files/flows_london.rds")
+flows_london <- rlist::list.load("flows_london.rds")
 
 sample_od <- sample(unique(flows_london$workplace),100)
 
