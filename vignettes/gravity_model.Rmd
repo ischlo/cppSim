@@ -20,17 +20,8 @@ knitr::opts_chunk$set(echo = TRUE
                       ,error = FALSE)
 
 library(rlist)
-library(sf)
-library(tmap)
-library(tmaptools)
 library(data.table)
-library(tidyverse)
-library(units)
-library(cppRouting)
 library(foreach)
-library(doParallel)
-library(jsonlite)
-library(here)
 
 source("support/gravity_model_functions.R")
 
