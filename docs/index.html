@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">cppSim</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,10 +73,9 @@
 </h1></div>
 <!-- badges: start -->
 
-<!-- ![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg) -->
 <!-- ![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg) -->
 <!-- badges: end -->
-<p>This package is in its early versions of development, it aims at providing a set of fast, efficient functions to perform Gravity models in the context of spatial interaction modelling. Currently, the doubly constrained model is implemented and future versions will aim to implement origin and destination constraints as well. It was developed in the context of studying commuter flows by active travel (cycling &amp; walking ) in Great Britain as part of a project at CASA, UCL.</p>
+<p>This aims at providing a set of fast, memory efficient functions to perform spatial interaction modelling, also called gravity modelling. Currently, the doubly and singly constrained models are implemented for canonical set of constraints. Future versions will aim to implement more origin and destination constraints as well. It was developed in the context of studying commuter flows by active travel (cycling &amp; walking ) in Great Britain as part of a project at CASA, UCL.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -95,6 +94,11 @@
 <li>flows_test : using the official census data in England from 2011, it’s a 983x983 matrix representing the flows of cyclists and pedestrians from each to each MSOA in London.</li>
 <li>distance_test : the distances between centroids of MSOAs. Computed with the London road network from OpenStreetMap and using the <code>cppRouting</code> package.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="spatial-interaction-models">Spatial interaction models<a class="anchor" aria-label="anchor" href="#spatial-interaction-models"></a>
+</h2>
+<p>Refer to the vignette to find some theory on SIMs and a <em>naive</em> implementation in <code>R</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -125,6 +129,7 @@
 <div class="section level2">
 <h2 id="dependencies">Dependencies<a class="anchor" aria-label="anchor" href="#dependencies"></a>
 </h2>
+<p>This package has some dependencies that might need manual installation, although the most important external ones have been provided with the source code.</p>
 <div class="section level3">
 <h3 id="external">External<a class="anchor" aria-label="anchor" href="#external"></a>
 </h3>
