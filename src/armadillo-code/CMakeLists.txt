@@ -613,19 +613,6 @@ install(TARGETS armadillo EXPORT ArmadilloLibraryDepends
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
   
-## smoke test
-
-if(BUILD_SMOKE_TEST)
-  if(HEADER_ONLY)
-    ## TODO: update to link smoke_test with ARMA_LIBS when HEADER_ONLY option is enabled
-    message(STATUS "*** building smoke_test not suported when HEADER_ONLY enabled")
-  else()
-    message(STATUS "*** configuring smoke_test")
-    enable_testing()
-    add_subdirectory(tests1)
-  endif()
-endif()
-
 ## pkgconfig related
 ## TODO: this currently doesn't handle the required SuperLU include dir
 ## TODO: update armadillo.pc.in to link with ARMA_LIBS when HEADER_ONLY option is enabled
