@@ -1,0 +1,220 @@
+---
+title: "Gravity model"
+dev: "png"
+fig_caption: true
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Gravity model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+```{r setup, include=FALSE,eval=TRUE}
+knitr::opts_chunk$set(echo = TRUE
+                      ,eval = TRUE
+                      ,cache = TRUE
+                      ,tidy = FALSE
+                      ,warning = FALSE
+                      ,error = FALSE)
+
+library(rlist)
+library(sf)
+library(tmap)
+library(tmaptools)
+library(data.table)
+library(tidyverse)
+library(units)
+library(cppRouting)
+library(foreach)
+library(doParallel)
+library(jsonlite)
+library(here)
+
+source("support/gravity_model_functions.R")
+
+```
+
+
+```{r load_data}
+
+flows_matrix <- list.load("gravity_model_files/flows_matrix.rds")
+
+msoa_graph_dist <- list.load("gravity_model_files/msoa_graph_dist.rds")
+
+msoa_graph_dist <- (msoa_graph_dist/1000/14) |> round()
+
+```
+
+This file will cover the process of building a local version of the gravity model used to predict cycling and/or walking flows across London. 
+
+# What model to use ?
+
+The general version of the doubly constrained gravity model looks the following way: 
+$$ T_{ij} = A_iB_jO_iD_jf(c_{ij}) $$ where $O_i$ is the working population of the origin, and $D_j$ is the available workplaces at the destination location:
+$$ O_i = \sum_j T_{ij} $$
+$$ D_j = \sum_i T_{ij} $$
+
+The terms $A_i$,$B_j$ are factors for each location. 
+The derivation of these factors is based on the relation: 
+
+$$A_i = [\sum_j B_jD_jf(c_{ij})]^{-1}$$
+
+$$B_j = [\sum_i A_iO_if(c_{ij})]^{-1}$$
+
+with the derivation made from a recursive chain with initial values 1. Let's refer to the parameters above as vectors $\vec{A}$,$\vec{B}$,$\vec{O}$,$\vec{D}$, and to the cost function and flow as matrices **F** and **T** such that $F_{ij}=f(c_{ij})$ and $T_{ij}$ is a flow from i to j. 
+
+
+```{r}
+# creating the O, D vectors. 
+O <- apply(flows_matrix,reduce, MARGIN = 2, sum) |> c()
+
+D <- apply(flows_matrix,reduce, MARGIN = 1, sum) |> c()
+```
+
+
+```{r}
+F_c <- cost_function(msoa_graph_dist,1,type = "exp")
+
+```
+
+
+Next, we need to run the recursive procedure until the values stabilise. We introduce the threshold at which we will stop running the recursion $\delta$. It corresponds to the rate of change of the parameter with respect to the previous iteration. 
+
+
+```{r}
+beta_calib <- foreach::foreach(i = 28:33
+                               ,.combine = rbind) %do% {
+                                 beta <- 0.1*(i - 1)
+                                 print(paste0("RUNNING MODEL FOR beta = ",beta))
+                                 run <- run_model(flows = flows_matrix
+                                                  ,distance = msoa_graph_dist
+                                                  ,beta = beta
+                                                  ,type = "exp"
+                                 )
+                             
+                                 cbind(beta, run$r2,run$rmse)
+                               }
+
+```
+
+
+```{r}
+
+plot(beta_calib[,1]
+     ,beta_calib[,2]
+     ,xlab = "beta value"
+     ,ylab = "quality of fit, r"
+     ,main = "influence of beta on the goodness of fit"
+     ,pch = 19
+     ,cex = 0.5
+     ,type = "b")
+
+
+```
+
+
+```{r}
+
+beta_best_fit <- beta_calib[which(beta_calib[,2] == max(beta_calib[,2])),1]
+x <- seq_len(100)/20
+plot(x
+     ,exp(-beta_best_fit*x)
+     ,main = "cost function"
+     ,xlab = "distance, km"
+     ,ylab = "decay factor"
+     ,pch = 19
+     ,cex = 0.5
+     ,type = "l")
+
+```
+
+
+```{r}
+
+run_best_fit <- run_model(flows = flows_matrix
+                 ,distance = msoa_graph_dist
+                 ,beta = beta_best_fit
+                 ,type = "exp"
+                 )
+
+```
+
+
+```{r}
+
+plot(seq_along(run_best_fit$calib)
+     ,run_best_fit$calib
+     ,xlab = "iteration"
+     ,ylab = "error"
+     ,main = "calibration of balancing factors"
+     ,pch = 19
+     ,cex = 0.5
+     ,type = "b"
+     
+)
+
+
+```
+
+```{r}
+plot(flows_matrix
+     ,run_best_fit$values
+     ,ylab = "flows model"
+     ,xlab = "flows"
+     ,log = "xy"
+     ,pch = 19
+     ,cex = 0.5)
+lines(seq_len(max(run_best_fit$values))
+      ,seq_len(max(run_best_fit$values))
+      ,col = "darkred"
+      ,lwd = 2)
+
+```
+
+
+```{r}
+
+## MODEL USING THE GLM And POISSON DISTRIBUTION
+
+flows_london <- rlist::list.load("gravity_model_files/flows_london.rds")
+
+sample_od <- sample(unique(flows_london$workplace),100)
+
+flows_grav <- flows_london[(workplace %in% sample_od) & (residence %in% sample_od),]
+
+flows_grav[,O := sum(bike),by = from_id]
+
+flows_grav[,D := sum(bike), by = to_id]
+
+#
+
+model <- glm(bike ~ workplace+residence+distance -1
+             ,data = flows_grav
+             ,family = poisson(link = "log")
+             )
+
+((model$fitted.values - flows_grav$bike)) |> hist(breaks = 100)
+
+r2 <- r_2(flows_grav$bike,model$fitted.values)
+r2
+
+```
+# Support functions
+```{r}
+
+print("cost function:")
+cost_function
+
+print("calibration function:")
+calibration
+
+print("model run")
+run_model
+
+```
+
+
+
+

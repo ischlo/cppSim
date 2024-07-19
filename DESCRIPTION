@@ -1,6 +1,6 @@
 Package: cppSim
 Title: Fast and memory efficient spatial interaction models
-Version: 0.1
+Version: 0.2
 Authors@R: 
     person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre")
 		,comment = c(ORCID = "0009-0004-4099-3198")
@@ -15,7 +15,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Imports:
     cli,
-    lifecycle,
     Rcpp
 LinkingTo: 
     Rcpp,

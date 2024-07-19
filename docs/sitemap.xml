@@ -13,6 +13,9 @@
     <loc>/articles/getting_started_2.html</loc>
   </url>
   <url>
+    <loc>/articles/gravity_model.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -26,6 +29,9 @@
   </url>
   <url>
     <loc>/reference/calibration_cpp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/cpp_found_openmp.html</loc>
   </url>
   <url>
     <loc>/reference/distance_test.html</loc>
