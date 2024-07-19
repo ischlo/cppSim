@@ -1,0 +1,22 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/getting_started_2.html</loc></url>
+<url><loc>/articles/gravity_model.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/calibration_cpp.html</loc></url>
+<url><loc>/reference/cpp_found_openmp.html</loc></url>
+<url><loc>/reference/distance_test.html</loc></url>
+<url><loc>/reference/flows_test.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/london_msoa.html</loc></url>
+<url><loc>/reference/run_model.html</loc></url>
+<url><loc>/reference/run_model_cpp.html</loc></url>
+<url><loc>/reference/run_model_single.html</loc></url>
+<url><loc>/reference/simulation.html</loc></url>
+</urlset>
+
