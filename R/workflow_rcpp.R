@@ -57,11 +57,8 @@ simulation <- function(flows_matrix
                        ,dist_matrix
                        ,beta_offset = .25
                        ) {
-  # ,cost_fun = "exp" # develop in a future version the possibility to provide a custom cost function.
-  # run name is a prefix to include in the name of saved files
 
   # CHECK VARIABLES PROVIDED TO SUBMIT TO CPP
-
   stopifnot(inherits(flows_matrix,"matrix")
             ,inherits(dist_matrix,"matrix")
             ,mode(dist_matrix) == "numeric"
@@ -111,12 +108,9 @@ run_model <- function(flows
   stopifnot(is.matrix(flows)
             ,is.matrix(distance) & is.numeric(distance)
             ,is.numeric(beta) & beta > 0
-            ,all(dim(flows)==dim(distance)))
-
-  # if(mode(flows)!='integer'){
-  #   flows <- `mode<-`(flows,'integer')
-  #   cat('Converting flows to integers by retaining the whole part of each value.')
-  # }
+            ,all(dim(flows)==dim(distance))
+            ,all(flows>=0)
+            ,all(distance>=0))
 
   # if(is.na(as.integer(ncores))) {
   #   print('Non integer value provided to ncores, using the default values of 1')
@@ -125,7 +119,6 @@ run_model <- function(flows
   #   print('Value provided to ncores to big, using default of one')
   #   ncores <<- 1
   # }
-
   # print(paste0("Running a model on "
   #              ,ncores
   #              ," cores."))
@@ -178,6 +171,10 @@ run_model_single <- function(flows
             ,is.numeric(distance)
             ,any(is.numeric(weight),is.null(weight))
             ,any(length(flows) == dim(distance))
+            ,all(flows>=0)
+            ,all(distance>=0)
+            ,is.numeric(beta) & beta > 0
+            ,any(all(weight > 0),is.null(weight))
             )
 
   if(is.null(weight) & length(flows) == dim(distance)[1]) {
