@@ -8,7 +8,7 @@
 #include <strings.h>
 #include "support.h"
 
-#define ARMA_USE_OPENMP true
+// #define ARMA_USE_OPENMP true
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -129,7 +129,8 @@ Rcpp::List run_simulation_cpp(const arma::mat &distance, const arma::mat &flows,
   double beta_new = beta_orig + .05;
   Rcpp::List res1, res2, res3;
   double eps = 1.0;
-  int i = 0;
+  // int i = 0;
+  //
   double step = 0.03;
 
   // #ifdef _OPENMP
@@ -161,7 +162,7 @@ Rcpp::List run_simulation_cpp(const arma::mat &distance, const arma::mat &flows,
 
     beta_orig = beta_new;
 
-    i++;
+    // i++;
 
   } while (eps > step);
 

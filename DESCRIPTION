@@ -1,10 +1,9 @@
 Package: cppSim
-Title: Fast and memory efficient spatial interaction models
+Title: Fast and Memory Efficient Spatial Interaction Models
 Version: 0.2
 Authors@R: 
     person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0004-4099-3198"))
-Author: Ivann Schlosser [auth,cre],
 Maintainer: Ivann Schlosser <ivann.schlosser.19@ucl.ac.uk>
 Description: This package builds on top of the RcppArmadillo linear
     algebra functionalities to do fast spatial interaction models in the
@@ -19,7 +18,6 @@ URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Depends:
     R (>= 2.10)
 Imports:
-    cli,
     Rcpp
 Suggests: 
     data.table,
@@ -27,6 +25,7 @@ Suggests:
     knitr,
     rlist,
     rmarkdown,
+    cli,
     sf,
     testthat (>= 3.0.0)
 LinkingTo: 

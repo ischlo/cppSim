@@ -9,3 +9,6 @@
 ^pkgdown$
 ^vignettes/*_files$
 ^cran-comments\.md$
+^doc$
+^Meta$
+^revdep$

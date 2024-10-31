@@ -1,5 +1,5 @@
 
-test_that("doubly constrained tested", {
+test_that("doubly constrained tested",{
 
   ## error datas
   error_dist <- cbind(cppSim::distance_test,1:ncol(cppSim::distance_test))
@@ -28,7 +28,7 @@ test_that("doubly constrained tested", {
   })
 
   testthat::expect_error({
-    cppSim::run_model(flows= error_flow_neg
+    cppSim::run_model(flows = error_flow_neg
                       ,distance = cppSim::distance_test
     )
   })
@@ -44,8 +44,6 @@ test_that("doubly constrained tested", {
   },"list")
 
 })
-
-
 
 test_that("singly constrained tested", {
 
@@ -73,7 +71,7 @@ test_that("singly constrained tested", {
 
   testthat::expect_error({
     cppSim::run_model_single(flows = orig_flow
-                      ,distance = error_dist_neg#cppSim::distance_test
+                      ,distance = error_dist_neg #cppSim::distance_test
     )
   })
 

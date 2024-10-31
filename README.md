@@ -108,7 +108,7 @@ On the R side, it uses `Rcpp` (Eddelbuettel and François 2011) and
 
 Compared to the equivalent functions implemented in pure R, it runs
 about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is
-increasignly more significant as matrices get bigger.
+increasingly more significant as matrices get bigger.
 
     #> [1] ""
 
