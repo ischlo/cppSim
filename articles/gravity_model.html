@@ -264,95 +264,82 @@ the previous iteration.</p>
 <pre><code><span><span class="co">## [1] "cost function:"</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cost_function</span></span></code></pre></div>
-<pre><code><span><span class="co">## function(d, beta, type = "exp") {</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   # d is the od distance matrix, taking the exponential</span></span>
-<span><span class="co">##   # means doing this operation for each individual element</span></span>
-<span><span class="co">##   #  with an exponent beta</span></span>
-<span><span class="co">##   # the type parameter allows to set it to either exp or pow.</span></span>
-<span><span class="co">##   #  pow means we use a power function as cost, rather than exponential</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   if (type == "exp") {</span></span>
-<span><span class="co">##     exp(-beta*d)</span></span>
-<span><span class="co">##   } else if (type == "pow") {</span></span>
-<span><span class="co">##     d^(-beta)</span></span>
-<span><span class="co">##   } else {</span></span>
-<span><span class="co">##     print("provide a type of functino to compute")</span></span>
-<span><span class="co">##   }</span></span>
+<pre><code><span><span class="co">## function (d, beta, type = "exp") </span></span>
+<span><span class="co">## {</span></span>
+<span><span class="co">##     if (type == "exp") {</span></span>
+<span><span class="co">##         exp(-beta * d)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     else if (type == "pow") {</span></span>
+<span><span class="co">##         d^(-beta)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     else {</span></span>
+<span><span class="co">##         print("provide a type of functino to compute")</span></span>
+<span><span class="co">##     }</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55f34ba248b8&gt;</span></span></code></pre>
+<span><span class="co">## &lt;bytecode: 0x55696d2684c0&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"calibration function:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "calibration function:"</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calibration</span></span></code></pre></div>
-<pre><code><span><span class="co">## function(cost_fun,O,D,delta = 0.05) {</span></span>
-<span><span class="co">##   B &lt;- rep_len(1,nrow(cost_fun))</span></span>
-<span><span class="co">##   eps &lt;- abs(sum(B))</span></span>
-<span><span class="co">##   e &lt;- NULL</span></span>
-<span><span class="co">##   i &lt;- 0</span></span>
-<span><span class="co">##   while((eps &gt; delta) &amp; (i&lt;50)) {</span></span>
-<span><span class="co">##     A_new &lt;- 1/(apply(cost_fun,function (x) sum(B*D*x),MARGIN = 1))</span></span>
-<span><span class="co">##     B_new &lt;- 1/(apply(cost_fun,function (x) sum(A_new*O*x),MARGIN = 2))</span></span>
-<span><span class="co">##     eps &lt;- abs(sum(B_new-B))</span></span>
-<span><span class="co">##     e &lt;- append(e,eps)</span></span>
-<span><span class="co">##     A &lt;- A_new</span></span>
-<span><span class="co">##     B &lt;- B_new</span></span>
-<span><span class="co">##     i &lt;- i+1</span></span>
-<span><span class="co">##   }</span></span>
-<span><span class="co">##   list(</span></span>
-<span><span class="co">##     "A"= A</span></span>
-<span><span class="co">##     ,"B" = B</span></span>
-<span><span class="co">##     ,"e" = e</span></span>
-<span><span class="co">##     )</span></span>
+<pre><code><span><span class="co">## function (cost_fun, O, D, delta = 0.05) </span></span>
+<span><span class="co">## {</span></span>
+<span><span class="co">##     B &lt;- rep_len(1, nrow(cost_fun))</span></span>
+<span><span class="co">##     eps &lt;- abs(sum(B))</span></span>
+<span><span class="co">##     e &lt;- NULL</span></span>
+<span><span class="co">##     i &lt;- 0</span></span>
+<span><span class="co">##     while ((eps &gt; delta) &amp; (i &lt; 50)) {</span></span>
+<span><span class="co">##         A_new &lt;- 1/(apply(cost_fun, function(x) sum(B * D * x), </span></span>
+<span><span class="co">##             MARGIN = 1))</span></span>
+<span><span class="co">##         B_new &lt;- 1/(apply(cost_fun, function(x) sum(A_new * O * </span></span>
+<span><span class="co">##             x), MARGIN = 2))</span></span>
+<span><span class="co">##         eps &lt;- abs(sum(B_new - B))</span></span>
+<span><span class="co">##         e &lt;- append(e, eps)</span></span>
+<span><span class="co">##         A &lt;- A_new</span></span>
+<span><span class="co">##         B &lt;- B_new</span></span>
+<span><span class="co">##         i &lt;- i + 1</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     list(A = A, B = B, e = e)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55f34833e0d0&gt;</span></span></code></pre>
+<span><span class="co">## &lt;bytecode: 0x55696a612320&gt;</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"model run"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "model run"</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run_model</span></span></code></pre></div>
-<pre><code><span><span class="co">## function(flows</span></span>
-<span><span class="co">##                       ,distance</span></span>
-<span><span class="co">##                       ,beta = 0.25</span></span>
-<span><span class="co">##                       ,type = "exp"</span></span>
-<span><span class="co">##                       #,cores = 3</span></span>
-<span><span class="co">##                       ) {</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   F_c &lt;- cost_function(d = {{distance}},beta = {{beta}},type = type)</span></span>
-<span><span class="co">##   print("cost function computed")</span></span>
-<span><span class="co">##   O &lt;- apply(flows,sum, MARGIN = 1) |&gt; as.integer()</span></span>
-<span><span class="co">##   D &lt;- apply(flows,sum, MARGIN = 2) |&gt; as.integer()</span></span>
-<span><span class="co">##   A_B &lt;- calibration(cost_fun = F_c</span></span>
-<span><span class="co">##                      ,O=O</span></span>
-<span><span class="co">##                      ,D=D</span></span>
-<span><span class="co">##                      ,delta = .001)</span></span>
-<span><span class="co">##   print("calibration: over")</span></span>
-<span><span class="co">##   A &lt;- A_B$A</span></span>
-<span><span class="co">##   B &lt;- A_B$B</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   flows_model &lt;- foreach(j = c(1:nrow(F_c))</span></span>
-<span><span class="co">##                          ,.combine = rbind) %do% {</span></span>
-<span><span class="co">##                            round(A[j]*B*O[j]*D*F_c[j,])</span></span>
-<span><span class="co">##                          }</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   print("model run: over")</span></span>
-<span><span class="co">##   e_sor &lt;- e_sorensen(flows,flows_model) |&gt; as.numeric()</span></span>
-<span><span class="co">##   print(paste0("E_sor = ",e_sor))</span></span>
-<span><span class="co">##   r2 &lt;- r_2(flows_model,flows) |&gt; as.numeric()</span></span>
-<span><span class="co">##   print(paste0("r2 = ",r2))</span></span>
-<span><span class="co">##   RMSE &lt;- rmse(flows_model,flows) |&gt; as.numeric()</span></span>
-<span><span class="co">##   print(paste0("RMSE = ",RMSE))</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##   list("values" = flows_model</span></span>
-<span><span class="co">##        ,"r2" = r2</span></span>
-<span><span class="co">##        ,"rmse" = RMSE</span></span>
-<span><span class="co">##        ,"calib" = A_B$e</span></span>
-<span><span class="co">##        ,"e_sor" = e_sor</span></span>
-<span><span class="co">##        )</span></span>
-<span><span class="co">## </span></span>
+<pre><code><span><span class="co">## function (flows, distance, beta = 0.25, type = "exp") </span></span>
+<span><span class="co">## {</span></span>
+<span><span class="co">##     F_c &lt;- cost_function(d = {</span></span>
+<span><span class="co">##         {</span></span>
+<span><span class="co">##             distance</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##     }, beta = {</span></span>
+<span><span class="co">##         {</span></span>
+<span><span class="co">##             beta</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##     }, type = type)</span></span>
+<span><span class="co">##     print("cost function computed")</span></span>
+<span><span class="co">##     O &lt;- as.integer(apply(flows, sum, MARGIN = 1))</span></span>
+<span><span class="co">##     D &lt;- as.integer(apply(flows, sum, MARGIN = 2))</span></span>
+<span><span class="co">##     A_B &lt;- calibration(cost_fun = F_c, O = O, D = D, delta = 0.001)</span></span>
+<span><span class="co">##     print("calibration: over")</span></span>
+<span><span class="co">##     A &lt;- A_B$A</span></span>
+<span><span class="co">##     B &lt;- A_B$B</span></span>
+<span><span class="co">##     flows_model &lt;- foreach(j = c(1:nrow(F_c)), .combine = rbind) %do% </span></span>
+<span><span class="co">##         {</span></span>
+<span><span class="co">##             round(A[j] * B * O[j] * D * F_c[j, ])</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##     print("model run: over")</span></span>
+<span><span class="co">##     e_sor &lt;- as.numeric(e_sorensen(flows, flows_model))</span></span>
+<span><span class="co">##     print(paste0("E_sor = ", e_sor))</span></span>
+<span><span class="co">##     r2 &lt;- as.numeric(r_2(flows_model, flows))</span></span>
+<span><span class="co">##     print(paste0("r2 = ", r2))</span></span>
+<span><span class="co">##     RMSE &lt;- as.numeric(rmse(flows_model, flows))</span></span>
+<span><span class="co">##     print(paste0("RMSE = ", RMSE))</span></span>
+<span><span class="co">##     list(values = flows_model, r2 = r2, rmse = RMSE, calib = A_B$e, </span></span>
+<span><span class="co">##         e_sor = e_sor)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55f34bd48728&gt;</span></span></code></pre>
+<span><span class="co">## &lt;bytecode: 0x55696d574f20&gt;</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -365,7 +352,7 @@ the previous iteration.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
