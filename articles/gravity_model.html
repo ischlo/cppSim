@@ -8,8 +8,8 @@
 <title>Gravity model • cppSim</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Gravity model">
 </head>
 <body>
@@ -66,12 +66,6 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">flows_matrix</span> <span class="op">&lt;-</span> <span class="fu">list.load</span><span class="op">(</span><span class="st">"flows_matrix.rds"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">msoa_graph_dist</span> <span class="op">&lt;-</span> <span class="fu">list.load</span><span class="op">(</span><span class="st">"msoa_graph_dist.rds"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">msoa_graph_dist</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">msoa_graph_dist</span><span class="op">/</span><span class="fl">1000</span><span class="op">/</span><span class="fl">14</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>This file will cover the process of building a local version of the
 gravity model used to predict cycling and/or walking flows across
 London.</p>
@@ -102,12 +96,12 @@ and to the cost function and flow as matrices <strong>F</strong> and
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>T</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">T_{ij}</annotation></semantics></math>
 is a flow from i to j.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># creating the O, D vectors. </span></span>
 <span><span class="va">O</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">flows_matrix</span>, <span class="va">sum</span>, MARGIN <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">flows_matrix</span>, <span class="va">sum</span>, MARGIN <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">F_c</span> <span class="op">&lt;-</span> <span class="fu">cost_function</span><span class="op">(</span><span class="va">msoa_graph_dist</span>,<span class="fl">1</span>,type <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span></code></pre></div>
 <p>Next, we need to run the recursive procedure until the values
 stabilise. We introduce the threshold at which we will stop running the
@@ -115,7 +109,7 @@ recursion
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>.
 It corresponds to the rate of change of the parameter with respect to
 the previous iteration.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">beta_calib</span> <span class="op">&lt;-</span> <span class="fu">foreach</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fl">28</span><span class="op">:</span><span class="fl">33</span></span>
 <span>                               ,.combine <span class="op">=</span> <span class="va">rbind</span><span class="op">)</span> <span class="op">%do%</span> <span class="op">{</span></span>
 <span>                                 <span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">0.1</span><span class="op">*</span><span class="op">(</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -170,7 +164,7 @@ the previous iteration.</p>
 <span><span class="co">## [1] "E_sor = 0.513382277125238"</span></span>
 <span><span class="co">## [1] "r2 = 0.547105339696983"</span></span>
 <span><span class="co">## [1] "RMSE = 864943"</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">beta_calib</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span></span>
 <span>     ,<span class="va">beta_calib</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span></span>
 <span>     ,xlab <span class="op">=</span> <span class="st">"beta value"</span></span>
@@ -180,7 +174,7 @@ the previous iteration.</p>
 <span>     ,cex <span class="op">=</span> <span class="fl">0.5</span></span>
 <span>     ,type <span class="op">=</span> <span class="st">"b"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gravity_model_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">beta_best_fit</span> <span class="op">&lt;-</span> <span class="va">beta_calib</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">beta_calib</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">beta_calib</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,<span class="fl">1</span><span class="op">]</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">/</span><span class="fl">20</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span></span>
@@ -192,7 +186,7 @@ the previous iteration.</p>
 <span>     ,cex <span class="op">=</span> <span class="fl">0.5</span></span>
 <span>     ,type <span class="op">=</span> <span class="st">"l"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gravity_model_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run_best_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>flows <span class="op">=</span> <span class="va">flows_matrix</span></span>
 <span>                 ,distance <span class="op">=</span> <span class="va">msoa_graph_dist</span></span>
 <span>                 ,beta <span class="op">=</span> <span class="va">beta_best_fit</span></span>
@@ -204,7 +198,7 @@ the previous iteration.</p>
 <span><span class="co">## [1] "E_sor = 0.523562724685593"</span></span>
 <span><span class="co">## [1] "r2 = 0.569416661266395"</span></span>
 <span><span class="co">## [1] "RMSE = 761393"</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">run_best_fit</span><span class="op">$</span><span class="va">calib</span><span class="op">)</span></span>
 <span>     ,<span class="va">run_best_fit</span><span class="op">$</span><span class="va">calib</span></span>
 <span>     ,xlab <span class="op">=</span> <span class="st">"iteration"</span></span>
@@ -216,7 +210,7 @@ the previous iteration.</p>
 <span>     </span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="gravity_model_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">flows_matrix</span></span>
 <span>     ,<span class="va">run_best_fit</span><span class="op">$</span><span class="va">values</span></span>
 <span>     ,ylab <span class="op">=</span> <span class="st">"flows model"</span></span>
@@ -229,7 +223,7 @@ the previous iteration.</p>
 <span>      ,col <span class="op">=</span> <span class="st">"darkred"</span></span>
 <span>      ,lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gravity_model_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## MODEL USING THE GLM And POISSON DISTRIBUTION</span></span>
 <span></span>
 <span><span class="va">flows_london</span> <span class="op">&lt;-</span> <span class="fu">rlist</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rlist/man/list.load.html" class="external-link">list.load</a></span><span class="op">(</span><span class="st">"flows_london.rds"</span><span class="op">)</span></span>
@@ -251,7 +245,7 @@ the previous iteration.</p>
 <span></span>
 <span><span class="op">(</span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">fitted.values</span> <span class="op">-</span> <span class="va">flows_grav</span><span class="op">$</span><span class="va">bike</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 <p><img src="gravity_model_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu">r_2</span><span class="op">(</span><span class="va">flows_grav</span><span class="op">$</span><span class="va">bike</span>,<span class="va">model</span><span class="op">$</span><span class="va">fitted.values</span><span class="op">)</span></span>
 <span><span class="va">r2</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.8854178</span></span></code></pre>
@@ -259,10 +253,10 @@ the previous iteration.</p>
 <div class="section level2">
 <h2 id="support-functions">Support functions<a class="anchor" aria-label="anchor" href="#support-functions"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"cost function:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "cost function:"</span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cost_function</span></span></code></pre></div>
 <pre><code><span><span class="co">## function (d, beta, type = "exp") </span></span>
 <span><span class="co">## {</span></span>
@@ -276,11 +270,11 @@ the previous iteration.</p>
 <span><span class="co">##         print("provide a type of functino to compute")</span></span>
 <span><span class="co">##     }</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55696d2684c0&gt;</span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<span><span class="co">## &lt;bytecode: 0x55bc48fd9930&gt;</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"calibration function:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "calibration function:"</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calibration</span></span></code></pre></div>
 <pre><code><span><span class="co">## function (cost_fun, O, D, delta = 0.05) </span></span>
 <span><span class="co">## {</span></span>
@@ -301,11 +295,11 @@ the previous iteration.</p>
 <span><span class="co">##     }</span></span>
 <span><span class="co">##     list(A = A, B = B, e = e)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55696a612320&gt;</span></span></code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<span><span class="co">## &lt;bytecode: 0x55bc46185f70&gt;</span></span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"model run"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "model run"</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run_model</span></span></code></pre></div>
 <pre><code><span><span class="co">## function (flows, distance, beta = 0.25, type = "exp") </span></span>
 <span><span class="co">## {</span></span>
@@ -339,7 +333,7 @@ the previous iteration.</p>
 <span><span class="co">##     list(values = flows_model, r2 = r2, rmse = RMSE, calib = A_B$e, </span></span>
 <span><span class="co">##         e_sor = e_sor)</span></span>
 <span><span class="co">## }</span></span>
-<span><span class="co">## &lt;bytecode: 0x55696d574f20&gt;</span></span></code></pre>
+<span><span class="co">## &lt;bytecode: 0x55bc4916c6d0&gt;</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
