@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "cppSim: Fast and Memory Efficient Spatial Interaction Models",
+  author   =  person(given = "Ivann",family = "Schlosser",email = "ivann.schlosser@ouce.ox.ac.uk",role = c("aut","cre")),
+  year     = "2023",
+  doi      = "10.5281/zenodo.14367756",
+  url      = "https://ischlo.github.io/cppSim/"
+)
