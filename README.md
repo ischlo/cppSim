@@ -6,6 +6,7 @@
 
 <!-- badges: start -->
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 ![](https://github.com/ischlo/cppSim/actions/workflows/check-standard.yaml/badge.svg)
@@ -110,24 +111,24 @@ Compared to the equivalent functions implemented in pure R, it runs
 about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is
 increasingly more significant as matrices get bigger.
 
-    #> [1] "/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"
+    [1] "/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"
 
 ## Citation
 
-    #> To cite package 'cppSim' in publications use:
-    #> 
-    #>   Schlosser I (2024). _cppSim: Fast and Memory Efficient Spatial
-    #>   Interaction Models_. R package version 0.2,
-    #>   https://github.com/ischlo/cppSim, <https://ischlo.github.io/cppSim/>.
-    #> 
-    #> A BibTeX entry for LaTeX users is
-    #> 
-    #>   @Manual{,
-    #>     title = {cppSim: Fast and Memory Efficient Spatial Interaction Models},
-    #>     author = {Ivann Schlosser},
-    #>     year = {2024},
-    #>     note = {R package version 0.2, https://github.com/ischlo/cppSim},
-    #>     url = {https://ischlo.github.io/cppSim/},
-    #>   }
+    To cite package 'cppSim' in publications use:
+
+      Schlosser I (2024). _cppSim: Fast and Memory Efficient Spatial
+      Interaction Models_. R package version 0.2,
+      https://github.com/ischlo/cppSim, <https://ischlo.github.io/cppSim/>.
+
+    A BibTeX entry for LaTeX users is
+
+      @Manual{,
+        title = {cppSim: Fast and Memory Efficient Spatial Interaction Models},
+        author = {Ivann Schlosser},
+        year = {2024},
+        note = {R package version 0.2, https://github.com/ischlo/cppSim},
+        url = {https://ischlo.github.io/cppSim/},
+      }
 
 <!-- ## References -->
