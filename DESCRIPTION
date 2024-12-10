@@ -13,6 +13,7 @@ Description: This package builds on top of the RcppArmadillo linear
     and destinations. It aims at implementing an easy approach based on
     matrices. Currently, the simplest form of production, destination and
     doubly constrained models are implemented.
+Date: 2024-12-10
 License: MIT + file LICENSE
 URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Depends:

@@ -101,8 +101,8 @@ installed.
 
 ### Other
 
-On the R side, it uses `Rcpp` (Eddelbuettel and François 2011) and
-`RcppArmadillo` (Eddelbuettel and Sanderson 2014).
+On the R side, it uses `Rcpp` \[@eddelbuettel2011\] and `RcppArmadillo`
+\[@eddelbuettel2014\].
 
 ## Performance
 
@@ -110,28 +110,24 @@ Compared to the equivalent functions implemented in pure R, it runs
 about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is
 increasingly more significant as matrices get bigger.
 
-    #> [1] ""
+    #> [1] "/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"
 
-## References
+## Citation
 
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
+    #> To cite package 'cppSim' in publications use:
+    #> 
+    #>   Schlosser I (2024). _cppSim: Fast and Memory Efficient Spatial
+    #>   Interaction Models_. R package version 0.2,
+    #>   https://github.com/ischlo/cppSim, <https://ischlo.github.io/cppSim/>.
+    #> 
+    #> A BibTeX entry for LaTeX users is
+    #> 
+    #>   @Manual{,
+    #>     title = {cppSim: Fast and Memory Efficient Spatial Interaction Models},
+    #>     author = {Ivann Schlosser},
+    #>     year = {2024},
+    #>     note = {R package version 0.2, https://github.com/ischlo/cppSim},
+    #>     url = {https://ischlo.github.io/cppSim/},
+    #>   }
 
-<div id="ref-eddelbuettel2011" class="csl-entry">
-
-Eddelbuettel, Dirk, and Romain François. 2011. “**Rcpp** : Seamless *R*
-and *C++* Integration.” *Journal of Statistical Software* 40 (8).
-<https://doi.org/10.18637/jss.v040.i08>.
-
-</div>
-
-<div id="ref-eddelbuettel2014" class="csl-entry">
-
-Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo:
-Accelerating R with High-Performance C++ Linear Algebra.” *Computational
-Statistics & Data Analysis* 71: 1054–63.
-<https://doi.org/10.1016/j.csda.2013.02.005>.
-
-</div>
-
-</div>
+<!-- ## References -->

@@ -1,6 +1,6 @@
 ---
 output: github_document
-bibliography: references.bib
+# bibliography: references.bib
 ---
 
 ------------------------------------------------------------------------
@@ -104,4 +104,13 @@ print(bench)
 
 ```
 
-## References
+## Citation 
+
+```{r eval=TRUE,echo=FALSE,include=TRUE}
+
+citation("cppSim")
+
+```
+
+
+<!-- ## References -->

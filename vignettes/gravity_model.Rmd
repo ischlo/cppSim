@@ -130,7 +130,7 @@ e_sorensen <- function(data, fit) {
 
 
 
-```{r load_data}
+```{r load_data, echo=FALSE}
 
 flows_matrix <- list.load("flows_matrix.rds")
 
