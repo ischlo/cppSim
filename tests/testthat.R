@@ -9,4 +9,4 @@
 library(testthat)
 library(cppSim)
 
-test_check("cppSim")
+testthat::test_check("cppSim")
