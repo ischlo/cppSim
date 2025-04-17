@@ -95,7 +95,9 @@ that come with this package to demonstrate power of
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"distance_test"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"flows_test"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"london_msoa"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"london_msoa"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">distance_test</span> <span class="op">&lt;-</span> <span class="va">distance_test</span> <span class="op">/</span> <span class="fl">1000</span></span></code></pre></div>
 <p>The two data sets provided consist in the flow matrix
 <code>flows_test</code> with cycling and walking flows combined between
 every MSOA in Greater London. The data was obtained from the 2011 UK
@@ -151,7 +153,7 @@ data:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_model</span><span class="op">$</span><span class="va">values</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.5903494</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.5903496</span></span></code></pre></div>
 <p>the correlation is already high, but we can do better, for that, we
 will need to calibrate the model. This is done with the
 <code>simulation</code> function, it will find the optimal cost function
@@ -170,11 +172,11 @@ determine the optimal distance decay coefficient, do the following:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ best_fit_values: num [1:983, 1:983] 1.43e+03 2.87e-03 9.48e-03 8.72e-04 8.05e-03 ...</span></span>
+<span><span class="co">#&gt;  $ best_fit_values: num [1:983, 1:983] 1.43e+03 2.87e-03 9.47e-03 8.73e-04 8.05e-03 ...</span></span>
 <span><span class="co">#&gt;  $ best_fit_beta  : num 0.962</span></span>
 <span></span>
 <span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_beta</span></span>
-<span><span class="co">#&gt; [1] 0.9615716</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9616045</span></span></code></pre></div>
 <p>The output will be a list with two elements, first the output of a
 model run that best fits the observed data. Second, the optimal distance
 decay exponent that produces this result. This value will be relevant
@@ -193,7 +195,7 @@ for further modelling. Let’s see some of the model results:</p>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_values</span><span class="op">)</span>,</span>
 <span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.9287456</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9287459</span></span></code></pre></div>
 <!-- # Conclusion -->
 </div>
 </div>
