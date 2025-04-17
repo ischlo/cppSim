@@ -26,3 +26,13 @@
 #'
 #' @source ONS, Office for National Statistics, 2011
 "london_msoa"
+
+
+#' flows_london
+#'
+#' @format ## `flows_london`
+#' A data.table with flows information
+#'
+#'
+#' @source ONS, Office for National Statistics, 2011
+"flows_london"

@@ -12,12 +12,14 @@ vignette: >
 
 
 ```{r setup, echo=FALSE, include=TRUE, eval=TRUE}
-knitr::opts_chunk$set(echo = TRUE
-                      ,eval = TRUE
-                      ,cache = TRUE
-                      ,tidy = FALSE
-                      ,warning = FALSE
-                      ,error = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  eval = TRUE,
+  cache = TRUE,
+  tidy = FALSE,
+  warning = FALSE,
+  error = FALSE
+)
 
 library(rlist)
 library(data.table)
@@ -32,7 +34,6 @@ library(foreach)
 ### this file contains the functions used to run the gravity model
 
 cost_function <- function(d, beta, type = "exp") {
-
   # d is the od distance matrix, taking the exponential
   # means doing this operation for each individual element
   #  with an exponent beta
@@ -40,7 +41,7 @@ cost_function <- function(d, beta, type = "exp") {
   #  pow means we use a power function as cost, rather than exponential
 
   if (type == "exp") {
-    exp(-beta*d)
+    exp(-beta * d)
   } else if (type == "pow") {
     d^(-beta)
   } else {
@@ -48,81 +49,95 @@ cost_function <- function(d, beta, type = "exp") {
   }
 }
 
-r_2 <- function(d, f) cor(d |> as.numeric()
-                          ,f |> as.numeric())^2
+r_2 <- function(d, f) {
+  cor(
+    d |> as.numeric(),
+    f |> as.numeric()
+  )^2
+}
 
-r <- function(d, f) cor(d |> as.numeric()
-                        ,f |> as.numeric())
+r <- function(d, f) {
+  cor(
+    d |> as.numeric(),
+    f |> as.numeric()
+  )
+}
 
-rmse <- function(d,f) sum((d-f)^2)
+rmse <- function(d, f) sum((d - f)^2)
 
-calibration <- function(cost_fun,O,D,delta = 0.05) {
-  B <- rep_len(1,nrow(cost_fun))
+calibration <- function(cost_fun, O, D, delta = 0.05) {
+  B <- rep_len(1, nrow(cost_fun))
   eps <- abs(sum(B))
   e <- NULL
   i <- 0
-  while((eps > delta) & (i<50)) {
-    A_new <- 1/(apply(cost_fun,function (x) sum(B*D*x),MARGIN = 1))
-    B_new <- 1/(apply(cost_fun,function (x) sum(A_new*O*x),MARGIN = 2))
-    eps <- abs(sum(B_new-B))
-    e <- append(e,eps)
+  while ((eps > delta) & (i < 50)) {
+    A_new <- 1 / (apply(cost_fun, function(x) sum(B * D * x), MARGIN = 1))
+    B_new <- 1 / (apply(cost_fun, function(x) sum(A_new * O * x), MARGIN = 2))
+    eps <- abs(sum(B_new - B))
+    e <- append(e, eps)
     A <- A_new
     B <- B_new
-    i <- i+1
+    i <- i + 1
   }
   list(
-    "A"= A
-    ,"B" = B
-    ,"e" = e
-    )
+    "A" = A,
+    "B" = B,
+    "e" = e
+  )
 }
 
-run_model <- function(flows
-                      ,distance
-                      ,beta = 0.25
-                      ,type = "exp"
-                      #,cores = 3
-                      ) {
-
-  F_c <- cost_function(d = {{distance}},beta = {{beta}},type = type)
+run_model <- function(
+    flows,
+    distance,
+    beta = 0.25,
+    type = "exp"
+    # ,cores = 3
+    ) {
+  F_c <- cost_function(d = {{ distance }}, beta = {{ beta }}, type = type)
   print("cost function computed")
-  O <- apply(flows,sum, MARGIN = 1) |> as.integer()
-  D <- apply(flows,sum, MARGIN = 2) |> as.integer()
-  A_B <- calibration(cost_fun = F_c
-                     ,O=O
-                     ,D=D
-                     ,delta = .001)
+  O <- apply(flows, sum, MARGIN = 1) |> as.integer()
+  D <- apply(flows, sum, MARGIN = 2) |> as.integer()
+  A_B <- calibration(
+    cost_fun = F_c,
+    O = O,
+    D = D,
+    delta = .001
+  )
   print("calibration: over")
   A <- A_B$A
   B <- A_B$B
 
-  flows_model <- foreach(j = c(1:nrow(F_c))
-                         ,.combine = rbind) %do% {
-                           round(A[j]*B*O[j]*D*F_c[j,])
-                         }
+  flows_model <- foreach(
+    j = c(1:nrow(F_c)),
+    .combine = rbind
+  ) %do% {
+    round(A[j] * B * O[j] * D * F_c[j, ])
+  }
 
   print("model run: over")
-  e_sor <- e_sorensen(flows,flows_model) |> as.numeric()
-  print(paste0("E_sor = ",e_sor))
-  r2 <- r_2(flows_model,flows) |> as.numeric()
-  print(paste0("r2 = ",r2))
-  RMSE <- rmse(flows_model,flows) |> as.numeric()
-  print(paste0("RMSE = ",RMSE))
+  e_sor <- e_sorensen(flows, flows_model) |> as.numeric()
+  print(paste0("E_sor = ", e_sor))
+  r2 <- r_2(flows_model, flows) |> as.numeric()
+  print(paste0("r2 = ", r2))
+  RMSE <- rmse(flows_model, flows) |> as.numeric()
+  print(paste0("RMSE = ", RMSE))
 
-  list("values" = flows_model
-       ,"r2" = r2
-       ,"rmse" = RMSE
-       ,"calib" = A_B$e
-       ,"e_sor" = e_sor
-       )
-
+  list(
+    "values" = flows_model,
+    "r2" = r2,
+    "rmse" = RMSE,
+    "calib" = A_B$e,
+    "e_sor" = e_sor
+  )
 }
 
 ### Validation
 
 e_sorensen <- function(data, fit) {
-  2*sum(apply(cbind(data |> c()
-                    ,fit |> c()), MARGIN = 1, FUN = min))/(sum(data) + sum(fit))
+  2 * sum(apply(cbind(
+    data |> c(),
+    fit |> c()
+  ), MARGIN = 1, FUN = min)) / (sum(data) + sum(fit))
 }
 
 
@@ -131,12 +146,12 @@ e_sorensen <- function(data, fit) {
 
 
 ```{r load_data, echo=FALSE}
+library(cppSim)
 
-flows_matrix <- list.load("flows_matrix.rds")
+data("distance_test")
+data("flows_test")
 
-msoa_graph_dist <- list.load("msoa_graph_dist.rds")
-
-msoa_graph_dist <- (msoa_graph_dist/1000/14) |> round()
+distance_test <- (distance_test / 1000 / 14) |> round()
 
 ```
 
@@ -161,14 +176,14 @@ with the derivation made from a recursive chain with initial values 1. Let's ref
 
 ```{r}
 # creating the O, D vectors. 
-O <- apply(flows_matrix, sum, MARGIN = 2) |> c()
+O <- apply(flows_test, sum, MARGIN = 2) |> c()
 
-D <- apply(flows_matrix, sum, MARGIN = 1) |> c()
+D <- apply(flows_test, sum, MARGIN = 1) |> c()
 ```
 
 
 ```{r}
-F_c <- cost_function(msoa_graph_dist,1,type = "exp")
+F_c <- cost_function(distance_test,1,type = "exp")
 
 ```
 
@@ -181,8 +196,8 @@ beta_calib <- foreach::foreach(i = 28:33
                                ,.combine = rbind) %do% {
                                  beta <- 0.1*(i - 1)
                                  print(paste0("RUNNING MODEL FOR beta = ",beta))
-                                 run <- run_model(flows = flows_matrix
-                                                  ,distance = msoa_graph_dist
+                                 run <- run_model(flows = flows_test
+                                                  ,distance = distance_test
                                                   ,beta = beta
                                                   ,type = "exp"
                                  )
@@ -226,8 +241,8 @@ plot(x
 
 ```{r}
 
-run_best_fit <- run_model(flows = flows_matrix
-                 ,distance = msoa_graph_dist
+run_best_fit <- run_model(flows = flows_test
+                 ,distance = distance_test
                  ,beta = beta_best_fit
                  ,type = "exp"
                  )
@@ -252,7 +267,7 @@ plot(seq_along(run_best_fit$calib)
 ```
 
 ```{r}
-plot(flows_matrix
+plot(flows_test
      ,run_best_fit$values
      ,ylab = "flows model"
      ,xlab = "flows"
@@ -271,7 +286,11 @@ lines(seq_len(max(run_best_fit$values))
 
 ## MODEL USING THE GLM And POISSON DISTRIBUTION
 
-flows_london <- rlist::list.load("flows_london.rds")
+# flows_london <- rlist::list.load("flows_london.rds")
+
+data(flows_london)
+
+flows_london <- flows_london
 
 sample_od <- sample(unique(flows_london$workplace),100)
 

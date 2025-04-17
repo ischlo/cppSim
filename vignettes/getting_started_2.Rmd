@@ -33,6 +33,8 @@ data("distance_test")
 data("flows_test")
 data("london_msoa")
 
+distance_test <- distance_test / 1000
+
 ```
 
 The two data sets provided consist in the flow matrix `flows_test` with cycling and walking flows combined between every MSOA in Greater London. The data was obtained from the 2011 UK census open data portal. The second matrix is a distance matrix between the centroids of every MSOAs in Greater London. It was computed using the great [`cppRouting`](https://github.com/vlarmet/cppRouting) package and OpenStreetMap networks adapted to be suitable for cycling and walking. The networks can be downloaded in a good format with the python package `OSMnx`, or with the recently published, but yet under development [`cppRosm`](https://ischlo.github.io/cppRosm/) package in R
