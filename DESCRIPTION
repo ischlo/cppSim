@@ -5,7 +5,7 @@ Authors@R:
     person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0004-4099-3198"))
 Maintainer: Ivann Schlosser <ivann.schlosser.19@ucl.ac.uk>
-Description: Building on top of the RcppArmadillo linear
+Description: Building on top of the 'RcppArmadillo' linear
     algebra functionalities to do fast spatial interaction models in the
     context of urban analytics, geography, transport modelling. It uses
     the Newton root search algorithm to determine the optimal cost
@@ -13,7 +13,7 @@ Description: Building on top of the RcppArmadillo linear
     and destinations. It aims at implementing an easy approach based on
     matrices. Currently, the simplest form of production, destination and
     doubly constrained models are implemented.
-Date: 2024-12-10
+Date: 2025-04-17
 License: MIT + file LICENSE
 URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Depends:

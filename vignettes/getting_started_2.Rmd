@@ -35,7 +35,7 @@ data("london_msoa")
 
 ```
 
-The two data sets provided consist in the flow matrix `flows_test` with cycling and walking flows combined between every MSOA in Greater London. The data was obtained from the 2011 UK census open data portal. The second matrix is a distance matrix between the centroids of every MSOAs in Greater London. It was computed using the great [`cppRouting`](https://github.com/vlarmet/cppRouting) package and OpenStreetMap networks adapted to be suitable for cycling and walking. The networks can be downloaded in a good format with the python package `OSMnx`, or with the recently published, but yet under development [`cppRnet`]() package in R
+The two data sets provided consist in the flow matrix `flows_test` with cycling and walking flows combined between every MSOA in Greater London. The data was obtained from the 2011 UK census open data portal. The second matrix is a distance matrix between the centroids of every MSOAs in Greater London. It was computed using the great [`cppRouting`](https://github.com/vlarmet/cppRouting) package and OpenStreetMap networks adapted to be suitable for cycling and walking. The networks can be downloaded in a good format with the python package `OSMnx`, or with the recently published, but yet under development [`cppRosm`](https://ischlo.github.io/cppRosm/) package in R
 
 Let's have a look at the size of these:
 
@@ -48,9 +48,9 @@ dim(flows_test)
 
 ```{r echo=FALSE, fig.show='hold', out.width="45%"}
 
-par(cex=.6)
-plot(density(distance_test), main = 'Distribution of distances',xlab = 'OD distance (km)')
-plot(density(flows_test), main = 'Distribution of flows', xlab = 'flow',log="x")
+par(cex = .6)
+plot(density(distance_test), main = "Distribution of distances", xlab = "OD distance (km)")
+plot(density(flows_test), main = "Distribution of flows", xlab = "flow", log = "x")
 
 ```
 
@@ -58,10 +58,10 @@ plot(density(flows_test), main = 'Distribution of flows', xlab = 'flow',log="x")
 
 ```{r, include=FALSE,eval=TRUE,echo=FALSE}
 
-london_msoa |> 
-  sf::st_as_sf(wkt = ncol(london_msoa),crs=4326) |> 
-  sf::st_geometry() |> 
-  plot(main="London MSOAs")
+london_msoa |>
+  sf::st_as_sf(wkt = ncol(london_msoa), crs = 4326) |>
+  sf::st_geometry() |>
+  plot(main = "London MSOAs")
 
 ```
 
@@ -73,9 +73,11 @@ If the coefficient of the distance decay (cost) function is known, one can simpl
 
 beta <- .1
 
-res_model <- cppSim::run_model(flows = flows_test
-                         ,distance = distance_test
-                         ,beta = beta)
+res_model <- cppSim::run_model(
+  flows = flows_test,
+  distance = distance_test,
+  beta = beta
+)
 
 str(res_model)
 
@@ -86,15 +88,18 @@ dim(res_model$values)
 Let's have a look at the correlation between the model output and data:
 
 ```{r echo=FALSE}
-plot(c(res_model$values)
-    ,c(flows_test)
-    ,main = 'Model vs Data')
+plot(c(res_model$values),
+  c(flows_test),
+  main = "Model vs Data"
+)
 
 ```
 
 ```{r}
-cor(c(res_model$values)
-    ,c(flows_test))
+cor(
+  c(res_model$values),
+  c(flows_test)
+)
 
 ```
 
@@ -106,8 +111,9 @@ If you want to run a full simulation that will calibrate a model and determine t
 
 ```{r}
 
-res_sim <- cppSim::simulation(flows_matrix = flows_test
-                          ,dist_matrix = distance_test
+res_sim <- cppSim::simulation(
+  flows_matrix = flows_test,
+  dist_matrix = distance_test
 )
 
 str(res_sim)
@@ -119,17 +125,21 @@ res_sim$best_fit_beta
 The output will be a list with two elements, first the output of a model run that best fits the observed data. Second, the optimal distance decay exponent that produces this result. This value will be relevant for further modelling. Let's see some of the model results:
 
 ```{r}
-plot(res_sim$best_fit_values
-     ,flows_test
-     # ,log = 'xy'
-     ,main = 'Model vs Data')
+plot(res_sim$best_fit_values,
+  flows_test
+  # ,log = 'xy'
+  ,
+  main = "Model vs Data"
+)
 ```
 
 Let's see how the model output correlates with the observed data:
 
 ```{r}
-cor(x=c(res_sim$best_fit_values)
-    ,y=c(flows_test))
+cor(
+  x = c(res_sim$best_fit_values),
+  y = c(flows_test)
+)
 
 ```
 
