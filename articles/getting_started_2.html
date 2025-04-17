@@ -105,8 +105,8 @@ the great <a href="https://github.com/vlarmet/cppRouting" class="external-link">
 package and OpenStreetMap networks adapted to be suitable for cycling
 and walking. The networks can be downloaded in a good format with the
 python package <code>OSMnx</code>, or with the recently published, but
-yet under development <a href=""><code>cppRnet</code></a> package in
-R</p>
+yet under development <a href="https://ischlo.github.io/cppRosm/" class="external-link"><code>cppRosm</code></a>
+package in R</p>
 <p>Let’s have a look at the size of these:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -131,9 +131,11 @@ one can simply run:</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fl">.1</span></span>
 <span></span>
-<span><span class="va">res_model</span> <span class="op">&lt;-</span> <span class="fu">cppSim</span><span class="fu">::</span><span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span>flows <span class="op">=</span> <span class="va">flows_test</span></span>
-<span>                         ,distance <span class="op">=</span> <span class="va">distance_test</span></span>
-<span>                         ,beta <span class="op">=</span> <span class="va">beta</span><span class="op">)</span></span>
+<span><span class="va">res_model</span> <span class="op">&lt;-</span> <span class="fu">cppSim</span><span class="fu">::</span><span class="fu"><a href="../reference/run_model.html">run_model</a></span><span class="op">(</span></span>
+<span>  flows <span class="op">=</span> <span class="va">flows_test</span>,</span>
+<span>  distance <span class="op">=</span> <span class="va">distance_test</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 1</span></span>
@@ -145,8 +147,10 @@ one can simply run:</p>
 data:</p>
 <p><img src="getting_started_2_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_model</span><span class="op">$</span><span class="va">values</span><span class="op">)</span></span>
-<span>    ,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_model</span><span class="op">$</span><span class="va">values</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.5903494</span></span></code></pre></div>
 <p>the correlation is already high, but we can do better, for that, we
 will need to calibrate the model. This is done with the
@@ -159,8 +163,9 @@ that gives the best fit.</p>
 determine the optimal distance decay coefficient, do the following:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">res_sim</span> <span class="op">&lt;-</span> <span class="fu">cppSim</span><span class="fu">::</span><span class="fu"><a href="../reference/simulation.html">simulation</a></span><span class="op">(</span>flows_matrix <span class="op">=</span> <span class="va">flows_test</span></span>
-<span>                          ,dist_matrix <span class="op">=</span> <span class="va">distance_test</span></span>
+<span><span class="va">res_sim</span> <span class="op">&lt;-</span> <span class="fu">cppSim</span><span class="fu">::</span><span class="fu"><a href="../reference/simulation.html">simulation</a></span><span class="op">(</span></span>
+<span>  flows_matrix <span class="op">=</span> <span class="va">flows_test</span>,</span>
+<span>  dist_matrix <span class="op">=</span> <span class="va">distance_test</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">)</span></span>
@@ -175,15 +180,19 @@ model run that best fits the observed data. Second, the optimal distance
 decay exponent that produces this result. This value will be relevant
 for further modelling. Let’s see some of the model results:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_values</span></span>
-<span>     ,<span class="va">flows_test</span></span>
-<span>     <span class="co"># ,log = 'xy'</span></span>
-<span>     ,main <span class="op">=</span> <span class="st">'Model vs Data'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_values</span>,</span>
+<span>  <span class="va">flows_test</span></span>
+<span>  <span class="co"># ,log = 'xy'</span></span>
+<span>  ,</span>
+<span>  main <span class="op">=</span> <span class="st">"Model vs Data"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting_started_2_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>Let’s see how the model output correlates with the observed data:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_values</span><span class="op">)</span></span>
-<span>    ,y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">res_sim</span><span class="op">$</span><span class="va">best_fit_values</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flows_test</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.9287456</span></span></code></pre></div>
 <!-- # Conclusion -->
 </div>
