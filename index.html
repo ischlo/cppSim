@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Fast and Memory Efficient Spatial Interaction Models">
-<meta name="description" content="Building on top of the RcppArmadillo linear algebra functionalities to do fast spatial interaction models in the context of urban analytics, geography, transport modelling. It uses the Newton root search algorithm to determine the optimal cost exponent and can run country level models with thousands of origins and destinations. It aims at implementing an easy approach based on matrices. Currently, the simplest form of production, destination and doubly constrained models are implemented.">
-<meta property="og:description" content="Building on top of the RcppArmadillo linear algebra functionalities to do fast spatial interaction models in the context of urban analytics, geography, transport modelling. It uses the Newton root search algorithm to determine the optimal cost exponent and can run country level models with thousands of origins and destinations. It aims at implementing an easy approach based on matrices. Currently, the simplest form of production, destination and doubly constrained models are implemented.">
+<meta name="description" content="Building on top of the RcppArmadillo linear algebra functionalities to do fast spatial interaction models in the context of urban analytics, geography, transport modelling. It uses the Newton root search algorithm to determine the optimal cost exponent and can run country level models with thousands of origins and destinations. It aims at implementing an easy approach based on matrices, that can originate from various routing and processing steps earlier in an workflow. Currently, the simplest form of production, destination and doubly constrained models are implemented. Schlosser et al. (2023) &lt;doi:10.48550/arXiv.2309.02112&gt;.">
+<meta property="og:description" content="Building on top of the RcppArmadillo linear algebra functionalities to do fast spatial interaction models in the context of urban analytics, geography, transport modelling. It uses the Newton root search algorithm to determine the optimal cost exponent and can run country level models with thousands of origins and destinations. It aims at implementing an easy approach based on matrices, that can originate from various routing and processing steps earlier in an workflow. Currently, the simplest form of production, destination and doubly constrained models are implemented. Schlosser et al. (2023) &lt;doi:10.48550/arXiv.2309.02112&gt;.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -108,7 +108,7 @@
 </h2>
 <p>For an example of what can be done with this package, please refer to the publication on active travel spatial interaction models in London for which it was originally developed.</p>
 <blockquote>
-<p><a href="http://arxiv.org/abs/2309.02112" class="external-link">Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.</a></p>
+<p><a href="https://arxiv.org/abs/2309.02112" class="external-link">Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.</a></p>
 </blockquote>
 <p>The accompanying code for the analysis is provided in the <a href="https://github.com/ischlo/quant_cycle_walk" class="external-link"><code>ischlo/quant_cycle_walk</code></a> repository.</p>
 </div>
@@ -130,7 +130,7 @@
 <div class="section level2">
 <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
 </h2>
-<p>Compared to the equivalent functions implemented in pure R, it runs about x10 faster for a <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∼</mo><mn>1000</mn><mo>×</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">\sim 1000\times 1000</annotation></semantics></math> OD matrix, the speed up is increasingly more significant as matrices get bigger.</p>
+<p>Compared to the equivalent functions implemented in pure R, it runs about x10 faster for a <span class="math inline">$`\sim 1000 \times 1000`$</span> OD matrix, the speed up is increasingly more significant as matrices get bigger.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -138,19 +138,20 @@
 </h2>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>To cite package <span class="st">'cppSim'</span> <span class="cf">in</span> publications use<span class="sc">:</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  Schlosser <span class="fu">I</span> (<span class="dv">2024</span>). _cppSim<span class="sc">:</span> Fast and Memory Efficient Spatial</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  Interaction Models_. R package version <span class="fl">0.2</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ischlo<span class="sc">/</span>cppSim, <span class="sc">&lt;</span>https<span class="sc">:</span><span class="er">//</span>ischlo.github.io<span class="sc">/</span>cppSim<span class="sc">/</span><span class="er">&gt;</span>.</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    title <span class="ot">=</span> {cppSim<span class="sc">:</span> Fast and Memory Efficient Spatial Interaction Models},</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    author <span class="ot">=</span> {Ivann Schlosser},</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2024</span>},</span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    note <span class="ot">=</span> {R package version <span class="fl">0.2</span>, https<span class="sc">:</span><span class="er">//</span>github.com<span class="sc">/</span>ischlo<span class="sc">/</span>cppSim},</span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>ischlo.github.io<span class="sc">/</span>cppSim<span class="sc">/</span>},</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  }</span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  Schlosser <span class="fu">I</span> (<span class="dv">2023</span>). _cppSim<span class="sc">:</span> Fast and Memory Efficient Spatial</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  Interaction Models_. doi<span class="sc">:</span><span class="fl">10.5281</span><span class="sc">/</span>zenodo<span class="fl">.14367756</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  <span class="sc">&lt;</span>https<span class="sc">:</span><span class="er">//</span>doi.org<span class="sc">/</span><span class="fl">10.5281</span><span class="sc">/</span>zenodo<span class="fl">.14367756</span><span class="sc">&gt;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="sc">&lt;</span>https<span class="sc">:</span><span class="er">//</span>ischlo.github.io<span class="sc">/</span>cppSim<span class="sc">/</span><span class="er">&gt;</span>.</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>A BibTeX entry <span class="cf">for</span> LaTeX users is</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>  <span class="sc">@</span>Manual{,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    title <span class="ot">=</span> {cppSim<span class="sc">:</span> Fast and Memory Efficient Spatial Interaction Models},</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>    author <span class="ot">=</span> {Ivann Schlosser},</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    year <span class="ot">=</span> {<span class="dv">2023</span>},</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>    doi <span class="ot">=</span> {<span class="fl">10.5281</span><span class="sc">/</span>zenodo<span class="fl">.14367756</span>},</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>    url <span class="ot">=</span> {https<span class="sc">:</span><span class="er">//</span>ischlo.github.io<span class="sc">/</span>cppSim<span class="sc">/</span>},</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  }</span></code></pre></div>
 <!-- ## References -->
 </div>
 </div>
@@ -181,7 +182,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Ivann Schlosser <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0004-4099-3198" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Ivann Schlosser <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0004-4099-3198" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -203,7 +204,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
