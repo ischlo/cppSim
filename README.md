@@ -14,6 +14,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 ![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg)
 
 <!-- ![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg) -->
+
 <!-- badges: end -->
 
 This aims at providing a set of fast, memory efficient functions to
@@ -82,7 +83,7 @@ for which it was originally developed.
 > [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M.,
 > 2023. Active-travel modelling: a methodological approach to networks
 > for walking and cycling commuting
-> analysis.](http://arxiv.org/abs/2309.02112)
+> analysis.](https://arxiv.org/abs/2309.02112)
 
 The accompanying code for the analysis is provided in the
 [`ischlo/quant_cycle_walk`](https://github.com/ischlo/quant_cycle_walk)
@@ -108,8 +109,8 @@ On the R side, it uses `Rcpp` \[@eddelbuettel2011\] and `RcppArmadillo`
 ## Performance
 
 Compared to the equivalent functions implemented in pure R, it runs
-about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is
-increasingly more significant as matrices get bigger.
+about x10 faster for a $`\sim 1000 \times 1000`$ OD matrix, the speed up
+is increasingly more significant as matrices get bigger.
 
     [1] "/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"
 
@@ -117,17 +118,18 @@ increasingly more significant as matrices get bigger.
 
     To cite package 'cppSim' in publications use:
 
-      Schlosser I (2024). _cppSim: Fast and Memory Efficient Spatial
-      Interaction Models_. R package version 0.2,
-      https://github.com/ischlo/cppSim, <https://ischlo.github.io/cppSim/>.
+      Schlosser I (2023). _cppSim: Fast and Memory Efficient Spatial
+      Interaction Models_. doi:10.5281/zenodo.14367756
+      <https://doi.org/10.5281/zenodo.14367756>,
+      <https://ischlo.github.io/cppSim/>.
 
     A BibTeX entry for LaTeX users is
 
       @Manual{,
         title = {cppSim: Fast and Memory Efficient Spatial Interaction Models},
         author = {Ivann Schlosser},
-        year = {2024},
-        note = {R package version 0.2, https://github.com/ischlo/cppSim},
+        year = {2023},
+        doi = {10.5281/zenodo.14367756},
         url = {https://ischlo.github.io/cppSim/},
       }
 

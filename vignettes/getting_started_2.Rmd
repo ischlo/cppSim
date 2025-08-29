@@ -50,9 +50,14 @@ dim(flows_test)
 
 ```{r echo=FALSE, fig.show='hold', out.width="45%"}
 
-par(cex = .6)
+oldpar <- par(cex = .6)
+
 plot(density(distance_test), main = "Distribution of distances", xlab = "OD distance (km)")
 plot(density(flows_test), main = "Distribution of flows", xlab = "flow", log = "x")
+
+# Restore
+par(oldpar)
+
 
 ```
 

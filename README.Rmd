@@ -75,7 +75,7 @@ model_test <- run_model(
 
 For an example of what can be done with this package, please refer to the publication on active travel spatial interaction models in London for which it was originally developed.
 
-> [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.](http://arxiv.org/abs/2309.02112)
+> [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.](https://arxiv.org/abs/2309.02112)
 
 The accompanying code for the analysis is provided in the [`ischlo/quant_cycle_walk`](https://github.com/ischlo/quant_cycle_walk) repository.
 
@@ -93,7 +93,7 @@ On the R side, it uses `Rcpp` [@eddelbuettel2011] and `RcppArmadillo` [@eddelbue
 
 ## Performance
 
-Compared to the equivalent functions implemented in pure R, it runs about x10 faster for a $\sim 1000\times 1000$ OD matrix, the speed up is increasingly more significant as matrices get bigger.
+Compared to the equivalent functions implemented in pure R, it runs about x10 faster for a $\sim 1000 \times 1000$ OD matrix, the speed up is increasingly more significant as matrices get bigger.
 
 ```{r performance,eval=TRUE,include=TRUE,echo = FALSE}
 

@@ -2,8 +2,9 @@ Package: cppSim
 Title: Fast and Memory Efficient Spatial Interaction Models
 Version: 0.2
 Authors@R: 
-    person("Ivann", "Schlosser", , "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
+    person(given = "Ivann", family = "Schlosser", email = "ivann.schlosser.19@ucl.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0004-4099-3198"))
+Author: Ivann Schlosser [aut, cre] (<https://orcid.org/0009-0004-4099-3198>)
 Maintainer: Ivann Schlosser <ivann.schlosser.19@ucl.ac.uk>
 Description: Building on top of the 'RcppArmadillo' linear
     algebra functionalities to do fast spatial interaction models in the
@@ -11,9 +12,11 @@ Description: Building on top of the 'RcppArmadillo' linear
     the Newton root search algorithm to determine the optimal cost
     exponent and can run country level models with thousands of origins
     and destinations. It aims at implementing an easy approach based on
-    matrices. Currently, the simplest form of production, destination and
+    matrices, that can originate from various routing and processing steps earlier in an workflow. 
+    Currently, the simplest form of production, destination and
     doubly constrained models are implemented.
-Date: 2025-04-17
+    Schlosser et al. (2023) <doi:10.48550/arXiv.2309.02112>.
+Date: 2025-08-29
 License: MIT + file LICENSE
 URL: https://ischlo.github.io/cppSim/, https://github.com/ischlo/cppSim
 Depends:
