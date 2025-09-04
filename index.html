@@ -58,18 +58,19 @@
 <div class="page-header"><h1 id="cppsim">cppSim<a class="anchor" aria-label="anchor" href="#cppsim"></a>
 </h1></div>
 <!-- badges: start -->
+<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756) -->
 
-<!-- ![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg) -->
 <!-- badges: end -->
 <p>This aims at providing a set of fast, memory efficient functions to perform spatial interaction modelling, also called gravity modelling. Currently, the doubly and singly constrained models are implemented for canonical set of constraints. Future versions will aim to implement more origin and destination constraints as well. It was developed in the context of studying commuter flows by active travel (cycling &amp; walking ) in Great Britain as part of a project at CASA, UCL.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Not yet on CRAN, so please install the development version of <code>cppSim</code> with:</p>
+<p>You can install the package from github or CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages(C("devtools","pak"))</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cppSim"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ischlo/cppSim"</span><span class="op">)</span></span>
+<span><span class="co"># # Or: </span></span>
+<span><span class="co"># install.packages("pak")</span></span>
 <span><span class="co"># pak::pak("ischlo/cppSim")</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -108,8 +109,9 @@
 </h2>
 <p>For an example of what can be done with this package, please refer to the publication on active travel spatial interaction models in London for which it was originally developed.</p>
 <blockquote>
-<p><a href="https://arxiv.org/abs/2309.02112" class="external-link">Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.</a></p>
+<p><a href="https://doi.org/10.1088/2632-072X/add257" class="external-link">Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.</a></p>
 </blockquote>
+<p><strong>Pre-print</strong>: <a href="https://arxiv.org/abs/2309.02112" class="external-link uri">https://arxiv.org/abs/2309.02112</a></p>
 <p>The accompanying code for the analysis is provided in the <a href="https://github.com/ischlo/quant_cycle_walk" class="external-link"><code>ischlo/quant_cycle_walk</code></a> repository.</p>
 </div>
 <div class="section level2">
@@ -124,14 +126,16 @@
 <div class="section level3">
 <h3 id="other">Other<a class="anchor" aria-label="anchor" href="#other"></a>
 </h3>
-<p>On the R side, it uses <code>Rcpp</code> [@eddelbuettel2011] and <code>RcppArmadillo</code> [@eddelbuettel2014].</p>
+<p>On the R side, it uses <code>Rcpp</code>[@eddelbuettel2011] and <code>RcppArmadillo</code>[@eddelbuettel2014].</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
 </h2>
 <p>Compared to the equivalent functions implemented in pure R, it runs about x10 faster for a <span class="math inline">$`\sim 1000 \times 1000`$</span> OD matrix, the speed up is increasingly more significant as matrices get bigger.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>     test replications elapsed relative user.self sys.self user.child sys.child</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="dv">2</span>     cpp           <span class="dv">10</span>   <span class="fl">3.257</span>    <span class="fl">1.000</span>     <span class="fl">3.046</span>    <span class="fl">0.184</span>          <span class="dv">0</span>         <span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="dv">1</span> regular           <span class="dv">10</span>  <span class="fl">34.201</span>   <span class="fl">10.501</span>    <span class="fl">31.887</span>    <span class="fl">1.970</span>          <span class="dv">0</span>         <span class="dv">0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
@@ -159,6 +163,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=cppSim" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/ischlo/cppSim/" class="external-link">Browse source code</a></li>
 </ul>
 </div>
@@ -189,9 +194,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://doi.org/10.5281/zenodo.14367756" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg" alt="DOI"></a></li>
+<li><a href="https://CRAN.R-project.org/package=cppSim" class="external-link"><img src="https://www.r-pkg.org/badges/version/cppSim" alt="CRAN"></a></li>
+<li><a href="https://doi.org/10.1088/2632-072X/add257" class="external-link"><img src="https://img.shields.io/badge/doi-10.1088/2632--072X/add257-blue.svg"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
-<li><a href="https://arxiv.org/abs/2309.02112" class="external-link"><img src="https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat-square" alt="arXiv"></a></li>
 </ul>
 </div>
 
