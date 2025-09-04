@@ -6,13 +6,15 @@
 
 <!-- badges: start -->
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756)
+<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756) -->
+
+[![CRAN](https://www.r-pkg.org/badges/version/cppSim)](https://CRAN.R-project.org/package=cppSim)
+[![](https://img.shields.io/badge/doi-10.1088/2632--072X/add257-blue.svg)](https://doi.org/10.1088/2632-072X/add257)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 ![](https://github.com/ischlo/cppSim/actions/workflows/check-standard.yaml/badge.svg)
-[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2309.02112)
-![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg)
-
+<!-- ![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg) -->
+<!-- [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2309.02112) -->
 <!-- ![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg) -->
 
 <!-- badges: end -->
@@ -27,13 +29,13 @@ in Great Britain as part of a project at CASA, UCL.
 
 ## Installation
 
-Not yet on CRAN, so please install the development version of `cppSim`
-with:
+You can install the package from github or CRAN with:
 
 ``` r
-# install.packages(C("devtools","pak"))
+install.packages("cppSim")
 
-devtools::install_github("ischlo/cppSim")
+# # Or: 
+# install.packages("pak")
 # pak::pak("ischlo/cppSim")
 ```
 
@@ -83,7 +85,9 @@ for which it was originally developed.
 > [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M.,
 > 2023. Active-travel modelling: a methodological approach to networks
 > for walking and cycling commuting
-> analysis.](https://arxiv.org/abs/2309.02112)
+> analysis.](https://doi.org/10.1088/2632-072X/add257)
+
+**Pre-print**: <https://arxiv.org/abs/2309.02112>
 
 The accompanying code for the analysis is provided in the
 [`ischlo/quant_cycle_walk`](https://github.com/ischlo/quant_cycle_walk)
@@ -103,8 +107,8 @@ installed.
 
 ### Other
 
-On the R side, it uses `Rcpp` \[@eddelbuettel2011\] and `RcppArmadillo`
-\[@eddelbuettel2014\].
+On the R side, it uses `Rcpp`\[@eddelbuettel2011\] and
+`RcppArmadillo`\[@eddelbuettel2014\].
 
 ## Performance
 
@@ -112,7 +116,9 @@ Compared to the equivalent functions implemented in pure R, it runs
 about x10 faster for a $`\sim 1000 \times 1000`$ OD matrix, the speed up
 is increasingly more significant as matrices get bigger.
 
-    [1] "/Users/cenv1069/Library/R/arm64/4.4/library/cppSim/extdata/benchmark_test.rds"
+         test replications elapsed relative user.self sys.self user.child sys.child
+    2     cpp           10   3.257    1.000     3.046    0.184          0         0
+    1 regular           10  34.201   10.501    31.887    1.970          0         0
 
 ## Citation
 

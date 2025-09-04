@@ -20,24 +20,30 @@ knitr::opts_chunk$set(
 # cppSim
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) ![](https://github.com/ischlo/cppSim/actions/workflows/check-standard.yaml/badge.svg) [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2309.02112)
-![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg)
-
+<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14367756.svg)](https://doi.org/10.5281/zenodo.14367756) -->
+[![CRAN](https://www.r-pkg.org/badges/version/cppSim)](https://CRAN.R-project.org/package=cppSim)
+`r badger::badge_doi("10.1088/2632-072X/add257", "blue")`
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) 
+![](https://github.com/ischlo/cppSim/actions/workflows/check-standard.yaml/badge.svg) 
+<!-- ![](https://github.com/ischlo/cppSim/actions/workflows/rhub.yaml/badge.svg) -->
+<!-- [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg?style=flat-square)](https://arxiv.org/abs/2309.02112) -->
 <!-- ![](https://github.com/ischlo/cppSim/actions/workflows/test-coverage.yaml/badge.svg) -->
 
 <!-- badges: end -->
+
+
 
 This aims at providing a set of fast, memory efficient functions to perform spatial interaction modelling, also called gravity modelling. Currently, the doubly and singly constrained models are implemented for canonical set of constraints. Future versions will aim to implement more origin and destination constraints as well. It was developed in the context of studying commuter flows by active travel (cycling & walking ) in Great Britain as part of a project at CASA, UCL.
 
 ## Installation
 
-Not yet on CRAN, so please install the development version of `cppSim` with:
+You can install the package from github or CRAN with:
 
 ``` r
-# install.packages(C("devtools","pak"))
+install.packages("cppSim")
 
-devtools::install_github("ischlo/cppSim")
+# # Or: 
+# install.packages("pak")
 # pak::pak("ischlo/cppSim")
 ```
 
@@ -75,7 +81,9 @@ model_test <- run_model(
 
 For an example of what can be done with this package, please refer to the publication on active travel spatial interaction models in London for which it was originally developed.
 
-> [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.](https://arxiv.org/abs/2309.02112)
+> [Schlosser, I., Maureira, V.M., Milton, R., Arcaute, E., Batty, M., 2023. Active-travel modelling: a methodological approach to networks for walking and cycling commuting analysis.](https://doi.org/10.1088/2632-072X/add257)
+
+**Pre-print**: https://arxiv.org/abs/2309.02112
 
 The accompanying code for the analysis is provided in the [`ischlo/quant_cycle_walk`](https://github.com/ischlo/quant_cycle_walk) repository.
 
@@ -89,7 +97,7 @@ The package uses the [`armadillo`](https://arma.sourceforge.net) library, which 
 
 ### Other
 
-On the R side, it uses `Rcpp` [@eddelbuettel2011] and `RcppArmadillo` [@eddelbuettel2014].
+On the R side, it uses `Rcpp`[@eddelbuettel2011] and `RcppArmadillo`[@eddelbuettel2014].
 
 ## Performance
 
@@ -97,8 +105,8 @@ Compared to the equivalent functions implemented in pure R, it runs about x10 fa
 
 ```{r performance,eval=TRUE,include=TRUE,echo = FALSE}
 
-bench <- system.file("extdata","benchmark_test.rds",package = "cppSim")
-  # rlist::list.load("benchmark_test.rds")
+bench <- system.file("extdata","benchmark_test.rds",package = "cppSim") |> 
+  rlist::list.load()
 
 print(bench)
 
